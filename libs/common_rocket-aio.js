@@ -1,0 +1,14 @@
+__inline("./rocket-2.0/rocket.js");
+__inline("./rocket-2.0/rocket.baseview.js");
+__inline("./rocket-2.0/rocket.collection.js");
+__inline("./rocket-2.0/rocket.model.js");
+__inline("./rocket-2.0/rocket.pageview.js");
+__inline("./rocket-2.0/rocket.subpageview.js");
+__inline("./rocket-2.0/rocket.router.js");
+__inline("./rocket-2.0/rocket.subview.js");
+__inline("./rocket-2.0/rocket.globalview.js");
+__inline("./rocket-2.0/rocket.subpagemanager.js");
+__inline("./rocket-2.0/pageanimations/rocket.pageanimation_dropdown.js");
+__inline("./rocket-2.0/pageanimations/rocket.pageanimation_fade.js");
+__inline("./rocket-2.0/pageanimations/rocket.pageanimation_simple.js");
+__inline("./rocket-2.0/pageanimations/rocket.pageanimation_slide.js");
