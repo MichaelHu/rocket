@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>webapp-2.0</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <link rel="apple-touch-icon-precomposed" href="http://m.baidu.com/static/news/webapp_114.png" />
+    <link rel="stylesheet" type="text/css" href="/static/slider/css/slider-aio.css" />
+    <link id="statLink" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper" class="news">
+<!--html snippets-->
+<!--全局加载元素-->
+<div class="global-loading">
+    <!--div class="global-loading-logo">
+        <div class="global-loading-anim"></div>
+    </div-->
+    <div class="global-loading-text">正在努力为您加载应用</div>
+</div>
+ 
+<div style="display:none;">
+    <div class="page-loading">
+        <div class="page-loading-logo">
+            <div class="page-loading-anim"></div>
+        </div>
+        <div class="page-loading-text">数据加载中，请稍候...</div>
+    </div>
+</div>
+ 
+
+
+<!--global view-->
+<div id="sidenav_globalview">
+    <div id="sidenav_globalview_commonbtngroup">
+        <span class="sidenav-globalview-btn-info"></span>
+        <span class="sidenav-globalview-btn-leave"></span>
+        <span class="sidenav-globalview-btn-shutdown"></span>
+    </div>
+    <div id="sidenav_globalview_outlinebtngroup">
+        <span class="sidenav-globalview-btn-relayout"></span>
+        <span class="sidenav-globalview-btn-down"></span>
+    </div>
+    <div id="sidenav_globalview_slidebtngroup">
+        <span class="sidenav-globalview-btn-up"></span>
+        <span class="sidenav-globalview-btn-next"></span>
+        <span class="sidenav-globalview-btn-prev"></span>
+        <span class="sidenav-globalview-btn-increasefont"></span>
+        <span class="sidenav-globalview-btn-decreasefont"></span>
+        <span class="sidenav-globalview-btn-increaseimage"></span>
+        <span class="sidenav-globalview-btn-decreaseimage"></span>
+    </div>
+</div>
+
+ 
+<div id="orientationrestrict_globalview">
+    <div id="orientationrestrict_globalview_content">
+        亲，请用竖屏浏览^_^
+    </div>
+</div>
+
+
+ 
+
+
+<!--page view-->
+<div id="outline_page">
+    <div id="outline_page_content" class="markdown-wrapper">
+        <!--div class="outline-page-content-relayoutbtn">relayout</div-->
+    </div>
+</div>
+ 
+<div id="slide_page">
+    <div id="slide_page_content">
+    </div>
+</div>
+ 
+
+
+    </div>
+
+<!--front template-->
+<script type="text/template" id="template_outline_section">
+
+<div class="outline-page-content-tile-content">
+
+<% _.each(sectionData, function(item, index){ %>
+
+<% if( 'code' == item.type ){ %>
+    <p class="markdown-codeblock">
+    <% _.each(item.content, function(item1, index1){ %>
+        <span><%= slider.helper.escapeMarkdownText(item.type, item1) %></span>
+    <% }); %>
+    </p>
+
+<% } else if( 'docinfo' == item.type){ %>
+    <div class="markdown-docinfo">
+    <% _.each(item.content, function(item1, index1){ %>
+        <% if(0 == index1){%>
+        <h1><%- item1 %></h1>
+        <% } else if(3 > index1){%>
+        <span><%- item1 %></span>
+        <% } %>
+    <% }); %>
+    </div>
+
+<% } else if( 'paragraph' == item.type){ %>
+    <p class="markdown-paragraph">
+    <%= slider.helper.escapeMarkdownText(item.type, item.content) %>
+    </p>
+
+<% } else if( 'headline' == item.type){ %>
+    <h<%= item.level %>>
+    <%- item.content %>
+    </h<%= item.level %>>
+
+<% } else if( 'ul' == item.type){ %>
+    <ul class="markdown-ul">
+    <% _.each(item.content, function(item1, index1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ul>
+
+<% } else if( 'ol' == item.type){ %>
+    <ol class="markdown-ol">
+    <% _.each(item.content, function(item1, index1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ol>
+
+<% } else if( 'image' == item.type){ %>
+    <p class="markdown-imagewrapper">
+        <img src="<%= item.url %>"
+            alt="<%= item.alt %>"
+            title="<%= item.title %>"
+            >
+        <p class="markdown-imagecaption">图： <%= item.title %></p>
+    </p>
+
+<% } %>
+
+<% }); %>
+
+
+</div>
+<div class="outline-page-content-tile-mask"><%= sectionIndex %></div>
+<div class="outline-page-content-tile-gobtn"></div>
+
+
+</script>
+
+
+ 
+<script type="text/template" id="template_slide_news">
+
+<% if(type == 'cover'){ %>
+
+<% _.each(section, function(item, index){ %>
+
+    <div class="markdown-slidewrapper">
+        <!--div class="markdown-slide-navigator">
+            <div class="markdown-slide-navigator-left">prev</div>
+            <div class="markdown-slide-navigator-right">next</div>
+        </div-->
+        <div class="markdown-slide-cover">
+
+    <% _.each(item.content, function(item1, index1){ %>
+        <% if(0 == index1){%>
+        <h2 class="markdown-slide-cover-title"><%- item1 %></h2>
+        <% } else if(1 == index1){%>
+        <span class="markdown-slide-cover-author"><%- item1 %></span>
+        <% } else if(2 == index1){%>
+        <span class="markdown-slide-cover-date"><%- item1 %></span>
+        <% } %>
+    <% }); %>
+
+        </div>
+    </div>
+
+<% }); %>
+
+
+<% } else { %>
+
+
+    <div class="markdown-slidewrapper">
+        <!--div class="markdown-slide-navigator">
+            <div class="markdown-slide-navigator-left">prev</div>
+            <div class="markdown-slide-navigator-right">next</div>
+        </div-->
+        <div class="markdown-slide-main">
+
+<% _.each(section, function(item, index){ %>
+
+<% if( 'code' == item.type ){ %>
+    <p class="markdown-slide-codeblock">
+    <% _.each(item.content, function(item1, index1){ %>
+        <span><%= slider.helper.escapeMarkdownText(item.type, item1) %></span>
+    <% }); %>
+    </p>
+
+<% } else if( 'paragraph' == item.type){ %>
+    <p class="markdown-slide-paragraph">
+    <%= slider.helper.escapeMarkdownText(item.type, item.content) %>
+    </p>
+
+<% } else if( 'headline' == item.type){ %>
+    <h<%= item.level %> <% if(item.level == 2){ %>class="markdown-slide-title"<% } %>>
+    <%- item.content %>
+    </h<%= item.level %>>
+
+<% } else if( 'ul' == item.type){ %>
+    <ul class="markdown-slide-ul">
+    <% _.each(item.content, function(item1, index1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ul>
+
+<% } else if( 'ol' == item.type){ %>
+    <ol class="markdown-slide-ol">
+    <% _.each(item.content, function(item1, index1){ %>
+        <li>
+    <%= slider.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ol>
+
+<% } else if( 'image' == item.type){ %>
+    <p class="markdown-slide-imagewrapper">
+        <img src="<%= item.url %>"
+            alt="<%= item.alt %>"
+            title="<%= item.title %>"
+            >
+        <p class="markdown-slide-imagecaption">图： <%= item.title %></p>
+    </p>
+
+<% } %>
+
+<% }); %>
+    </div>
+</div>
+<!--@todo: add emphasis-->
+
+<% } %>
+</script>
+ 
+ 
+
+</body>
+</html>
+<script type="text/javascript" src="/static/common/js/common_lib-aio.js"></script>
+<script type="text/javascript" src="/static/common/js/common_rocket-aio.js"></script>
+<script type="text/javascript" src="/static/slider/js/slider-aio.js"></script>
+<script>
+rocket.init();
+</script>
