@@ -1,0 +1,8 @@
+__inline("./rocket.init.js")
+__inline("./rocket.router.hellorocket.js")
+__inline("../page/index/js/view/rocket.pageview.index.js")
+__inline("../page/index/js/view/rocket.subview.index_content.js")
+__inline("../page/index/js/view/rocket.subview.index_header.js")
+__inline("../page/sayhello/js/view/rocket.pageview.sayhello.js")
+__inline("../page/sayhello/js/view/rocket.subview.sayhello_content.js")
+__inline("../page/sayhello/js/view/rocket.subview.sayhello_header.js")
