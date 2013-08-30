@@ -1,8 +1,8 @@
 #!/bin/bash
 
 pushd ..
-fis release -o --md5 2 -d output
+fis release -d output
 rm -rf release/*
-cp -r output/release/* release
+cp -r output/release/build release
 rm -rf output
 popd
