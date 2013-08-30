@@ -1,8 +1,8 @@
 #!/bin/bash
 
 pushd ..
-fis release -d output
 rm -rf release/*
+fis release -d output
 cp -r output/release/build release
 rm -rf output
 popd
