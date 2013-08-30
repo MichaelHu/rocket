@@ -15,7 +15,7 @@ A simple demo webapp, including index page and list page, which acts like iOS ui
 
 ## slider
 
-A demo webapp, including outline page and slide page, which shows presentation content through slides.
+A demo webapp, including outline page and slide page, which shows presentation content through slides and supports touch events or keyboard events.
 
 <http://258i.com/template/slider/slider.html>
 
