@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>rocket-2.0</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <!--link rel="apple-touch-icon-precomposed" href="http://m.baidu.com/static/news/webapp_114.png" /-->
+    <!--link rel="stylesheet" type="text/css" href="../common/common_lib-aio.css" /-->
+    <link rel="stylesheet" type="text/css" href="/static/howtorocket/css/howtorocket-aio.css" />
+    <link id="statLink" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper" class="news">
+<!--html snippets-->
+<!--全局加载元素-->
+<div class="global-loading">
+    <!--div class="global-loading-logo">
+        <div class="global-loading-anim"></div>
+    </div-->
+    <div class="global-loading-text">正在努力为您加载应用</div>
+</div>
+ 
+<div style="display:none;">
+    <div class="page-loading">
+        <div class="page-loading-logo">
+            <div class="page-loading-anim"></div>
+        </div>
+        <div class="page-loading-text">数据加载中，请稍候...</div>
+    </div>
+</div>
+ 
+
+<!--page view-->
+<div id="howto_page">
+<div class="vs-toolbar">
+    <span class="vs-toolbar-leftcontainer">
+        <a href="javascript:history.back()">back</a>
+    </span>
+    <span class="vs-toolbar-titlecontainer">
+        title
+    </span>
+    <span class="vs-toolbar-rightcontainer">
+        <a href="#howtoindex">home</a>
+    </span>
+</div>
+
+ 
+    <!--div id="howto_page_header">header</div-->
+    <div id="howto_page_content" class="markdown-wrapper">
+    </div>
+</div>
+ 
+<div id="howtoindex_page">
+    <div id="howtoindex_page_header">Rocket - v2.0 Docs</div>
+    <div id="howtoindex_page_content">
+    </div>
+</div>
+ 
+
+    </div>
+
+
+<!--front template-->
+<script type="text/template" id="template_howto_article">
+
+<% _.each(article, function(item, index){ %>
+
+<% if( 'code' == item.type ){ %>
+    <p class="markdown-codeblock">
+    <% _.each(item.content, function(item1, index1){ %>
+        <span><%= howtorocket.helper.escapeMarkdownText(item.type, item1) %></span>
+    <% }); %>
+    </p>
+
+<% } else if( 'docinfo' == item.type){ %>
+    <div class="markdown-docinfo">
+    <% _.each(item.content, function(item1, index1){ %>
+        <% if(0 == index1){%>
+        <h1><%- item1 %></h1>
+        <% } else if(3 > index1){%>
+        <span><%- item1 %></span>
+        <% } %>
+    <% }); %>
+    </div>
+
+<% } else if( 'paragraph' == item.type){ %>
+    <p class="markdown-paragraph">
+    <%= howtorocket.helper.escapeMarkdownText(item.type, item.content) %>
+    </p>
+
+<% } else if( 'headline' == item.type){ %>
+    <h<%= item.level %>>
+    <%- item.content %>
+    </h<%= item.level %>>
+
+<% } else if( 'ul' == item.type){ %>
+    <ul class="markdown-ul">
+    <% _.each(item.content, function(item1, index1){ %>
+        <li>
+    <%= howtorocket.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ul>
+
+<% } else if( 'ol' == item.type){ %>
+    <ol class="markdown-ol">
+    <% _.each(item.content, function(item1, index1){ %>
+        <li>
+    <%= howtorocket.helper.escapeMarkdownText(item.type, item1) %>
+        </li>
+    <% }); %>
+    </ol>
+
+<% } else if( 'image' == item.type){ %>
+    <p class="markdown-imagewrapper">
+        <img src="<%= item.url %>"
+            alt="<%= item.alt %>"
+            title="<%= item.title %>"
+            >
+        <p class="markdown-imagecaption">图： <%= item.title %></p>
+    </p>
+
+<% } %>
+
+<% }); %>
+<!--@todo: add emphasis-->
+</script>
+
+
+ 
+<script type="text/template" id="template_howtoindex_articles">
+
+<h3><%- jianjie_tag %></h3>
+<% _.each(jianjie_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- workshop_tag %>[持续增加，敬请期待]</h3>
+<% _.each(workshop_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- rumen_tag %></h3>
+<% _.each(rumen_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- standards_tag %></h3>
+<% _.each(standards_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- jinjie_tag %></h3>
+<% _.each(jinjie_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+</script>
+
+<script type="text/template" id="template_howtoindex_header">
+
+<a href="<%= tuiguang.url %>"
+    class="howtoindex-page-header-tuiguang"><img src="<%= tuiguang.iconurl %>"></a>
+
+</script>
+
+ 
+</body>
+</html>
+<script type="text/javascript" src="/static/common/js/common_lib-aio.js"></script>
+<script type="text/javascript" src="/static/common/js/common_rocket-aio.js"></script>
+<script type="text/javascript" src="/static/howtorocket/js/howtorocket-aio.js"></script>
+<script>
+    rocket.init();
+</script>

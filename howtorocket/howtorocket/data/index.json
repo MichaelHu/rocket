@@ -1,0 +1,124 @@
+{
+
+"content": [
+
+    {
+        "title": "Rocket框架介绍"
+        ,"url": "/slider/slider.html"
+        ,"icon": ""
+        ,"desc": [ 
+            "整体介绍Rocket框架的由来、目标、亮点"
+            ,"交互提示：PC用键盘方向键，触屏设备上下左右滑动"
+            ,"本身是基于Rocket框架实现的一个H5 PPT"
+            ,"例子包含子页面管理和回收"
+            ,"例子包含MVC分解"
+        ]
+    }
+
+    ,{
+        "title": "HOW TO ..."
+        ,"url": "#howtoindex"
+        ,"icon": ""
+        ,"desc": [ 
+            "框架概述"
+            ,"workshop"
+            ,"目录规范、编码和命名规范"
+            ,"事件中心和模块解耦"
+            ,"MVC分解和分而治之"
+            ,"共享模型"
+            ,"其他"
+        ]
+    }
+
+    ,{
+        "title": "Hello Rocket Demo"
+        ,"url": "/hellorocket/hellorocket.html"
+        ,"icon": ""
+        ,"desc": [ 
+            "Rocket之Hello World"
+            ,"使用脚手架迅速搭建WebApp原型"
+            ,"对应workshop，请从HOW TO ...进入"
+        ]
+    }
+
+    ,{
+        "title": "Smartnews ( ipad only )"
+        ,"url": "/smartnews/smartnews.html"
+        ,"icon": ""
+        ,"desc": [ 
+            "Rocket应用之线上产品"
+            ,"展示Rocket框架的各种综合用法"
+            ,"产品本身是一个很典型的HTML5 WebAPP例子"
+            ,"！！！提示：Chrome访问请将UA设置为iPad UA"
+        ]
+    }
+
+    ,{
+        "title": "Zaker Demo (only for phone)"
+        ,"url": "#navzaker"
+        ,"icon": ""
+        ,"desc": [ 
+            "多页横向切换，类zaker磁帖页"
+            ,"温馨提示：针对手机屏幕设计，浏览器下访问，请缩小窗口浏览"
+            ,"使用多栏技术模拟多页切换，通过滑动进行动画切换"
+            ,"dropdown、slide切换效果"
+        ]
+    }
+
+    ,{
+        "title": "Optimized Index"
+        ,"url": "#indexoptimized"
+        ,"icon": ""
+        ,"desc": [ 
+            "复杂subview tree创建，父view render后，再进行子view的setup"
+            ,"GMU2 button控件"
+            ,"事件中心用于自定义事件的注册和派发"
+        ]
+    }
+
+    ,{
+        "title": "Simple Index"
+        ,"url": "#"
+        ,"icon": ""
+        ,"desc": [ 
+            "简单Subview Tree"
+        ]
+    }
+
+    ,{
+        "title": "List/Detail Demo A: raw"
+        ,"url": "#list/focus"
+        ,"icon": ""
+        ,"desc": [ 
+            "raw scroll (iOS 5+)，非GMU"
+            ,"subpage不回收"
+            ,"页面slide切换"
+        ]
+    }
+
+    ,{
+        "title": "List/Detail Demo B: gc"
+        ,"url": "#listwithgc/focus"
+        ,"icon": ""
+        ,"desc": [ 
+            "subpage iScroll，非GMU"
+            ,"subpage回收及配置：this.getSubpageManager(opt)"
+            ,"页面fade-in切换"
+        ]
+    }
+
+    ,{
+        "title": "List/Detail Demo C: GMU2"
+        ,"url": "#listgmu/focus"
+        ,"icon": ""
+        ,"desc": [ 
+            "subpage使用iScroll(GMU2)的一种较通用方式，有别于GMU1：创建、刷新、与回收机制配合"
+            ,"pullup to load more"
+            ,"subpage回收机制，可配置"
+            ,"页面slide切换"
+        ]
+    }
+
+]
+
+}

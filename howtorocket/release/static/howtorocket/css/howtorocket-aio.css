@@ -1,0 +1,352 @@
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+/*global*/
+@-webkit-keyframes loading-anim {
+    0% {-webkit-transform: rotate(0);}
+    50% {-webkit-transform: rotate(180deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+
+.global-loading{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:start;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background-color:#FFF;
+    z-index:1000;
+}
+
+.global-loading-anim{
+    height:50px;
+    width:50px;
+    -webkit-animation: loading-anim 2s linear infinite;
+    background:url("/static/howtorocket/img/rotating.png") 0 0 no-repeat;
+    background-size: 50px 50px;
+}
+
+.global-loading-text{
+    margin-top:160px;
+    color: #888;
+    font: bold 16px/30px normal;
+}
+
+.global-loading-logo{
+    margin-top:120px;
+    height:66px;
+    width:66px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background: url("/static/howtorocket/img/loading-logo-news.png") 0 0 no-repeat;
+    background-size: 65px 65px;
+}
+
+
+@-webkit-keyframes loading-anim {
+    0% {-webkit-transform: rotate(0);}
+    50% {-webkit-transform: rotate(180deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+
+.page-loading{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:start;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background-color:#FFF;
+    z-index:1000;
+}
+
+.page-loading-anim{
+    height:50px;
+    width:50px;
+    -webkit-animation: loading-anim 2s linear infinite;
+    background:url("/static/howtorocket/img/rotating.png") 0 0 no-repeat;
+    background-size: 50px 50px;
+}
+
+.page-loading-text{
+    color: #888;
+    font: bold 16px/30px normal;
+}
+
+.page-loading-logo{
+    margin-top:120px;
+    height:66px;
+    width:66px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background: url("/static/howtorocket/img/loading-logo-news.png") 0 0 no-repeat;
+    background-size: 65px 65px;
+}
+
+
+.vs-toolbar{
+    height:40px;
+    text-align:center;
+    background:#eee;
+    -webkit-box-shadow:0px 0px 3px #333;
+
+    font:bold 18px/40px normal;
+}
+
+.vs-toolbar a{
+    display:inline-block;
+    margin:5px;
+    padding:3px;
+    font:bold 18px/24px normal;
+    border-width:1px solid #ccc;
+    border-radius:4px;
+    background:#ddd;
+    text-decoration:none;
+    color:#fff;
+
+    -webkit-box-shadow:0px 0px 1px #666;
+}
+
+.vs-toolbar .vs-toolbar-leftcontainer{
+    float:left;
+    height:100%;
+}
+
+.vs-toolbar .vs-toolbar-rightcontainer{
+    float:right;
+    height:100%;
+}
+
+.vs-toolbar .vs-toolbar-titlecontainer{
+    display:inline-block;
+    height:100%;
+}
+
+
+
+
+/*page*/
+/*页面视图id，与action同名，以_page为后缀*/
+#howtoindex_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*最低高度，确保即使没内容，loading也可以展示，同时能遮住下方内容*/
+    min-height:600px;
+}
+
+#howtoindex_page_header{
+    margin-bottom:15px;
+    padding:5px 0 3px 8px;
+    text-shadow:rgba(64, 64, 64, 0.3) 3px -3px 2px;
+    font:bold 22px/40px Arial;
+    border:2px solid #F0A22A;
+    border-width:0 0 3px;
+}
+
+
+#howtoindex_page_content{
+    /*作为绝对定位的loading样式的容器，需要使用relative定位*/
+    position:relative;
+    height:100%;
+}
+
+#howtoindex_page_content h3{
+    margin:5px;
+    padding:5px;
+    border-style:solid;
+    border-color:#67AA49;
+    border-width:0 0 1px 5px;
+    font:bold 20px/28px normal;
+}
+
+.howtoindex-page-content-list{
+    display:block;
+    height:26px;
+    margin:2px;
+    padding:5px;
+    color:#000;
+    text-decoration:none;
+    font:normal 16px/26px normal;
+    border-color:#eee;
+    border-style:outset;
+    border-width:0 0 1px;
+    border-radius:4px;
+}
+
+
+/*页面视图id，与action同名，以_page为后缀*/
+#howto_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*最低高度，确保即使没内容，loading也可以展示*/
+    min-height:300px;
+}
+
+#howto_page_content{
+    /*作为绝对定位的loading样式的容器，需要使用relative定位*/
+    position:relative;
+    height:100%;
+}
+
+.howto-page-content-article{
+    /*作为绝对定位的loading样式的容器，需要使用relative定位*/
+    position:relative;
+    /*使子页面切换效果更好，需使用absolute定位*/
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    /*bottom:0; 或 height:100%; 会使loading覆盖不住内容*/
+}
+
+/**
+ * markdown style
+ */
+.markdown-wrapper{
+    margin-top:18px;
+    padding:0 5px;
+}
+
+.markdown-wrapper h1{
+    margin:10px 0;
+    font:bold 26px/30px normal;
+}
+
+.markdown-wrapper h2{
+    margin:8px 0;
+    font:bold 22px/26px normal;
+    background-color:#bbb;
+}
+
+.markdown-wrapper h3{
+    margin:6px 0;
+    font:bold 18px/22px normal;
+    background-color:#ccc;
+}
+
+.markdown-wrapper h4{
+    margin:4px 0;
+    font:bold 14px/18px normal;
+    background-color:#ddd;
+}
+
+.markdown-wrapper a{
+    background:#6bfafa;
+    text-decoration:none;
+    color:#f00;
+}
+
+.markdown-wrapper em{
+    background:#F7CC27;
+    text-decoration:none;
+}
+
+.markdown-docinfo{
+    text-align:right;
+}
+
+.markdown-docinfo h1{
+    text-align:center; 
+}
+
+.markdown-docinfo span{
+    margin:0 5px;
+    color:#888; 
+    font:normal 14px/18px normal;
+}
+
+.markdown-paragraph{
+    margin-top:5px;
+    padding-left:5px;
+    text-indent:28px;
+    font:normal 14px/22px normal;
+}
+
+.markdown-ul{
+    margin-left:20px;
+    margin-top:5px;
+    padding-left:5px;
+    list-style:square outside none;
+    font:normal 14px/22px normal;
+}
+
+.markdown-ol{
+    margin-left:20px;
+    margin-top:5px;
+    padding-left:5px;
+    list-style:decimal outside none;
+    font:normal 14px/22px normal;
+}
+
+.markdown-codeblock{
+    margin:8px 0;
+    padding-left:5px;
+    border:1px solid #bbb;
+    border-radius:4px;
+    background:#eee;
+    font:italic 12px/20px Courier;
+}
+
+.markdown-codeblock span{
+    display:block;
+    overflow:hidden;
+}
+
+.markdown-imagewrapper{
+    margin:8px 0;
+    text-align:center;
+}
+
+.markdown-imagecaption{
+    text-align:center;
+    font:normal 14px/22px normal;
+}
+
+.markdown-imagewrapper img{
+    max-width:100%;
+    border:1px solid #bbb;
+}
+
+
+
+
