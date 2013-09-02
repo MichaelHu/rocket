@@ -8,8 +8,8 @@ rocket.collection.howtoindex_articles = rocket.collection.extend({
     }
 
     ,url: function(){
-        return '/articles/list_articles.php?'
-            + 'tag=' +  encodeURIComponent(this.tag);
+        return '/?tn=markdown&act=list_articles'
+            + '&tag=' +  encodeURIComponent(this.tag);
     }
 
     ,parse: function(resp, xhr){

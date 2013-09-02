@@ -18,8 +18,8 @@ rocket.model.howto_article = rocket.model.extend({
     }
 
     ,url: function(){
-        return '/articles/get_article.php?'
-            + 'title=' +  encodeURIComponent(this.title);
+        return '/?tn=markdown&act=get_article'
+            + '&title=' +  encodeURIComponent(this.title);
     }
 
     ,parse: function(resp, xhr){
