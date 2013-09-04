@@ -1,0 +1,14 @@
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+/*global*/
+@import url("./globalloading.css?__inline")
+@import url("./pageloading.css?__inline")
+
+/*page*/
+@import url("../page/PAGENAME/css/PAGENAME.css?__inline")
