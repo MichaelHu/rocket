@@ -18,9 +18,9 @@ $.extend(rocket, {
             // http://remysharp.com/2010/08/05/doing-it-right-skipping-the-iphone-url-bar/
             setTimeout(function(){
                 window.scrollTo(0, 0);
-                $.later(function(){
+                setTimeout(function(){
                     $(document.body).height($(window).height());
-                });
+                }, 0);
                 rocket.isLoaded = true;
             }, 1000); 
 
