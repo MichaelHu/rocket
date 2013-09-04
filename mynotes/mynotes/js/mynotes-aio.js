@@ -1,0 +1,5 @@
+__inline("./rocket.init.js")
+__inline("./rocket.router.mynotes.js")
+__inline("../page/index/js/model/rocket.model.article_list.js")
+__inline("../page/index/js/view/rocket.pageview.index.js")
+__inline("../page/index/js/view/rocket.subview.index_lines.js")

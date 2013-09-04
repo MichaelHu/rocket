@@ -1,0 +1,14 @@
+<script type="text/html" id="template_index_lines">
+    <%for(var i in articles){%>
+        <div class="line"><div class="line-number"><%=articles[i].article_id%></div><p><%- articles[i].title%></p></div>
+    <%}%>
+</script>
+
+<script type="text/html" id="template_index_article_list_more">
+
+    <%for(var i=0; i<articles.length; i++){%>
+        <div class="line"><div class="line-number"><%=articles[i].article_id%></div><p><%- articles[i].title%></p></div>
+    <%}%>
+
+</script>
+

@@ -1,0 +1,23 @@
+*{
+    padding:0;
+    margin:0;
+}
+
+body{
+    font:normal 14px/24px normal;
+}
+
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+/*global*/
+@import url("./globalloading.css?__inline")
+@import url("./pageloading.css?__inline")
+
+/*page*/
+@import url("../page/index/css/index.css?__inline")

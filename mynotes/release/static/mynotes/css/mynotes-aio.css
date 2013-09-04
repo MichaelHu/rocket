@@ -1,0 +1,186 @@
+*{
+    padding:0;
+    margin:0;
+}
+
+body{
+    font:normal 14px/24px normal;
+}
+
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+/*global*/
+@-webkit-keyframes loading-anim {
+    0% {-webkit-transform: rotate(0);}
+    50% {-webkit-transform: rotate(180deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+
+.global-loading{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:start;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background-color:#FFF;
+    z-index:1000;
+}
+
+.global-loading-anim{
+    height:50px;
+    width:50px;
+    -webkit-animation: loading-anim 2s linear infinite;
+    background:url("/static/mynotes/img/rotating.png") 0 0 no-repeat;
+    background-size: 50px 50px;
+}
+
+.global-loading-text{
+    margin-top:160px;
+    color: #888;
+    font: bold 16px/30px normal;
+}
+
+.global-loading-logo{
+    margin-top:120px;
+    height:66px;
+    width:66px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background: url("/static/mynotes/img/loading-logo-news.png") 0 0 no-repeat;
+    background-size: 65px 65px;
+}
+
+
+@-webkit-keyframes loading-anim {
+    0% {-webkit-transform: rotate(0);}
+    50% {-webkit-transform: rotate(180deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+
+.page-loading{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:start;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background-color:#FFF;
+    z-index:1000;
+}
+
+.page-loading-anim{
+    height:50px;
+    width:50px;
+    -webkit-animation: loading-anim 2s linear infinite;
+    background:url("/static/mynotes/img/rotating.png") 0 0 no-repeat;
+    background-size: 50px 50px;
+}
+
+.page-loading-text{
+    color: #888;
+    font: bold 16px/30px normal;
+}
+
+.page-loading-logo{
+    margin-top:120px;
+    height:66px;
+    width:66px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background: url("/static/mynotes/img/loading-logo-news.png") 0 0 no-repeat;
+    background-size: 65px 65px;
+}
+
+
+
+/*page*/
+/*页面视图id，与action同名，以_page为后缀*/
+#index_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*阻止文本选中*/
+    -webkit-user-select:none;
+    -moz-user-select:none;
+
+    overflow:auto; 
+    background-color:#000; 
+    color:#fff;
+}
+
+#index_page_lines{
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    overflow:scroll;
+}
+
+#index_page_lines *{
+    -webkit-transform:translateZ(0);
+}
+
+div.current-line{
+    background:#87AB4B;
+}
+
+div.line {
+    clear:both; 
+    min-height:24px; 
+    _height:24px;
+}
+
+div.line-number{
+    float:left; 
+    color:#ff0; 
+    font-style:italic; 
+    cursor:pointer;
+}
+
+div.line p{
+    margin-left:48px; 
+    padding-left:20px; 
+    border-left:3px solid #4285F4;
+}
+
+div.line p{
+    min-height:24px; 
+    _height:24px;
+}
+
+
