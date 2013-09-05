@@ -1,22 +1,26 @@
 (function($){
 
-rocket.model.article_list = rocket.model.extend({
+rocket.model.search_notes = rocket.model.extend({
 
     initialize: function(attributes, options){
         var me = this;
 
         me.requestData = {
-            'from_article_id': 1
-            ,'context_num': 25
+            'key_words': 'test'
+            ,'context_num': 1
+            ,'from': 1
+            ,'count': 50
         };
 
         me.data = [];
     }
 
     ,urlTemplate: _.template([
-        '/?tn=notes&act=getArticleAbstracts'
-        ,'from_article_id=<%= from_article_id %>'
+        '/?tn=notes&act=searchNotes'
+        ,'key_words=<%= key_words %>'
         ,'context_num=<%= context_num %>'
+        ,'from=<%= from %>'
+        ,'count=<%= count %>'
     ].join('&'))
 
     ,url: function(){
@@ -46,8 +50,8 @@ rocket.model.article_list = rocket.model.extend({
     }
 
     ,parse: function(resp, xhr){
-        this.data = resp[0];
-        return resp[0];
+        this.data = resp;
+        return resp;
     }
 
 });

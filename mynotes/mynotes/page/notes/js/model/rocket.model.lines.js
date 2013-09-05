@@ -1,22 +1,24 @@
 (function($){
 
-rocket.model.article_list = rocket.model.extend({
+rocket.model.lines = rocket.model.extend({
 
     initialize: function(attributes, options){
         var me = this;
 
         me.requestData = {
-            'from_article_id': 1
+            'line': 1
             ,'context_num': 25
+            ,'direction': 1
         };
 
         me.data = [];
     }
 
     ,urlTemplate: _.template([
-        '/?tn=notes&act=getArticleAbstracts'
-        ,'from_article_id=<%= from_article_id %>'
+        '/?tn=notes&act=getNotesWithLineNo'
+        ,'line=<%= line %>'
         ,'context_num=<%= context_num %>'
+        ,'direction=<%= direction %>'
     ].join('&'))
 
     ,url: function(){
@@ -46,8 +48,8 @@ rocket.model.article_list = rocket.model.extend({
     }
 
     ,parse: function(resp, xhr){
-        this.data = resp[0];
-        return resp[0];
+        this.data = resp;
+        return resp;
     }
 
 });

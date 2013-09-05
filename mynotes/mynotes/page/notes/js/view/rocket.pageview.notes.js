@@ -1,18 +1,18 @@
 (function($){
 
-rocket.pageview.index = rocket.pageview.extend({
+rocket.pageview.notes = rocket.pageview.extend({
 
-    el: '#index_page'
+    el: '#notes_page'
 
     ,init: function(options){
         var me = this;
 
-        me.setup(new rocket.subview.index_header(
+        me.setup(new rocket.subview.notes_header(
             $.extend({}, me.options)
             ,me
         ));
 
-        me.setup(new rocket.subview.index_lines(
+        me.setup(new rocket.subview.notes_lines(
             $.extend({}, me.options)
             ,me
         ));

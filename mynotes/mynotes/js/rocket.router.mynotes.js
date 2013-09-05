@@ -10,6 +10,9 @@ rocket.router.mynotes = rocket.router.extend({
 
         '': 'index'
         ,'index': 'index'
+        ,'article/:articleid': 'article'
+        ,'search/:keywords': 'search'
+        ,'notes/:line': 'notes'
 
         /*
         '': 'index'
@@ -20,17 +23,17 @@ rocket.router.mynotes = rocket.router.extend({
 
     // 页面切换顺序配置
     ,pageOrder: [
-        /*
         'index'
-        ,'sayhello'
-        */
+        ,'search'
+        ,'notes'
+        ,'article'
     ]
 
     // 位置记忆，默认为false，不进行位置记忆
     ,enablePositionRestore: true
 
     // 默认页面切换动画
-    ,defaultPageTransition: 'simple'
+    ,defaultPageTransition: 'slide'
 
     // 页面切换动画配置
     ,pageTransition: {
@@ -49,15 +52,23 @@ rocket.router.mynotes = rocket.router.extend({
         this.doAction('index', {});
     }
 
-    /*
-    ,index: function() {
-        this.doAction('index', {});
+    ,article: function(articleid) {
+        this.doAction('article', {
+            articleid: decodeURIComponent(articleid)
+        });
     }
 
-    ,sayhello: function() {
-        this.doAction('sayhello', {});
+    ,search: function(keywords) {
+        this.doAction('search', {
+            keywords: decodeURIComponent(keywords)
+        });
     }
-    */
+
+    ,notes: function(line) {
+        this.doAction('notes', {
+            line: decodeURIComponent(line)
+        });
+    }
 
 }); 
 

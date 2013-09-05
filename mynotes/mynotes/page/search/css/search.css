@@ -1,5 +1,5 @@
 /*页面视图id，与action同名，以_page为后缀*/
-#index_page{
+#search_page{
     /*默认不展示*/
     display:none;
 
@@ -19,7 +19,7 @@
     overflow:auto; 
 }
 
-#index_page_header{
+#search_page_header{
     /*绝对定位*/
     position:absolute;
 
@@ -29,7 +29,7 @@
     height:40px;
 }
 
-#index_page_lines{
+.search-page-lines{
     /*绝对定位*/
     position:absolute;
 
@@ -41,43 +41,36 @@
     overflow:scroll;
 }
 
-#index_page_lines *{
+.search-page-lines *{
     -webkit-transform:translateZ(0);
 }
 
-#index_page_lines div.current-line{
+.search-page-lines div.current-line{
     background:#87AB4B;
 }
 
-#index_page_lines div.line {
+.search-page-lines div.line {
     clear:both; 
-    min-height:40px; 
-    _height:40px;
+    min-height:24px; 
+    _height:24px;
+    margin-bottom:20px;
 }
 
-#index_page_lines div.line-number{
+.search-page-lines div.inner-line-number{
     float:left; 
-    width:40px;
-    overflow:hidden;
+    color:#ff0; 
+    font-style:italic; 
     cursor:pointer;
-
-    color:#999; 
-    text-align:center;
-    font:italic 12px/40px normal;
 }
 
-#index_page_lines div.line p{
-    min-height:40px; 
-    _height:40px;
-    padding-left:40px; 
-
-    font:normal 16px/40px normal;
+.search-page-lines div.inner-line p{
+    margin-left:48px; 
+    padding-left:20px; 
+    border-left:3px solid #4285F4;
 }
 
-#index_page_lines div.current-line p{
-    color:#fff;
+.search-page-lines div.inner-line p{
+    min-height:24px; 
+    _height:24px;
 }
 
-#index_page_lines div.current-line div.line-number{
-    color:#fff;
-}

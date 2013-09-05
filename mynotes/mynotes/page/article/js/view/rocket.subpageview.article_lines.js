@@ -1,15 +1,17 @@
 (function($){
 
-rocket.subview.index_lines = rocket.subview.extend({
+rocket.subpageview.article_lines = rocket.subpageview.extend({
 
-    el: '#index_page_lines'
+    className: 'article-page-lines'
 
-    ,lineTemplate: _.template($('#template_index_lines').text())
+    ,lineTemplate: _.template($('#template_article_lines').text())
 
     ,init: function(options){
         var me = this;
 
-        me.model = new rocket.model.article_list(
+        me.articleID = options.articleid;
+
+        me.model = new rocket.model.article(
             {}
             ,$.extend({}, me.options)
         );
@@ -26,11 +28,20 @@ rocket.subview.index_lines = rocket.subview.extend({
         var me = this,
             ec = me.ec;
         
-        ec.on('pagebeforechange', me.onpagebeforechange, me);
-
         me.model.on('change', me.onmodelchange, me);
-
+    
         ec.on('keydown', me.onkeydown, me);
+    }
+
+    ,unregisterEvents: function(){
+        var me = this,
+            ec = me.ec;
+        
+        // ec.on('pagebeforechange', me.onpagebeforechange, me);
+
+        me.model.off('change', me.onmodelchange, me);
+
+        ec.off('keydown', me.onkeydown, me);
     }
 
     ,render: function(model){
@@ -42,7 +53,7 @@ rocket.subview.index_lines = rocket.subview.extend({
                 console.log(data);
                 me.$el.append(
                     me.lineTemplate({
-                        articles: data 
+                        lines: data[1]
                     })
                 );
                 break;
@@ -56,6 +67,9 @@ rocket.subview.index_lines = rocket.subview.extend({
         }
 
         if(me.isFirstLoad){
+            me.ec.trigger('articleinfochange', {
+                info: data[0]
+            });
             me.isFirstLoad = false;
             me.hideLoading();
             me.highlightFirstLine();
@@ -91,15 +105,17 @@ rocket.subview.index_lines = rocket.subview.extend({
         me.render(model);
     }
 
-    ,onpagebeforechange: function(params){
-        var me = this,
-            ec = me.ec,
-            from = params.from,
-            to = params.to,
-            param = params.params;
+    ,onsubpagebeforechange: function(params){          
+        var me = this,                                 
+            from = params.from,                        
+            to = params.to,                            
+            param = params.params,                     
+            featureString = me.getFeatureString(param);
 
-        if(to == ec){
-            if(me.isFirstLoad){
+        if(to == me.ec                                 
+            && featureString == me.featureString){     
+                                                       
+            if(me.isFirstLoad){                        
                 me.model.fetch({
                     reqdata: {
                         from_article_id: 1
@@ -107,9 +123,13 @@ rocket.subview.index_lines = rocket.subview.extend({
                     }
                 });
             }
-            me.show();
+          
+            // @note: 平滑子页面，显示不隐藏
+            me.$el.show();                             
         }
+  
     }
+
 
     ,onkeydown: function(params){
         var me = this,
@@ -127,9 +147,9 @@ rocket.subview.index_lines = rocket.subview.extend({
                 }
                 break;
 
-            // "o" key down
-            case 79:
-                me.goArticle();
+            // "h" key down
+            case 72:
+                me.goArticleList();
                 break;
 
             // "j" key down
@@ -140,13 +160,6 @@ rocket.subview.index_lines = rocket.subview.extend({
             // "k" key down
             case 75:
                 me.goUp();
-                break;
-
-            // "/" key down
-            case 191:
-                me.startSearch();
-                e.preventDefault();
-                e.stopPropagation();
                 break;
 
         }
@@ -248,7 +261,7 @@ rocket.subview.index_lines = rocket.subview.extend({
 
         if(me.isArrivingEnd('next')){
             console.log('arriving tail...');
-            me.getMoreNext();
+            // me.getMoreNext();
         }
     }
 
@@ -264,7 +277,7 @@ rocket.subview.index_lines = rocket.subview.extend({
 
         if(me.isArrivingEnd('prev')){
             console.log('arriving head...');
-            me.getMorePrev();
+            // me.getMorePrev();
         }
     }
 
@@ -343,7 +356,7 @@ rocket.subview.index_lines = rocket.subview.extend({
 
         me.model.fetch({
             reqdata: {
-                from_article_id: articleID - me.contextNum - 1 
+                article_id: me.articleID 
                 ,context_num: me.contextNum
             }
         });
@@ -366,20 +379,11 @@ rocket.subview.index_lines = rocket.subview.extend({
         });
     }
 
-    ,goArticle: function(){
+    ,goArticleList: function(){
         var me = this;
-        if(me.$currentLine){
-            me.navigate([
-                '#article'
-                ,'/'
-                ,me.$currentLine.find('.line-number').text()
-            ].join(''));
-        }
-    }
-
-    ,startSearch: function(){
-        var me = this; 
-        me.ec.trigger('startsearch');
+        me.navigate(
+            '#index'
+        );
     }
 
 });

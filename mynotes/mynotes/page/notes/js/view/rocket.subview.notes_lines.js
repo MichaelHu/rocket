@@ -1,15 +1,15 @@
 (function($){
 
-rocket.subview.index_lines = rocket.subview.extend({
+rocket.subview.notes_lines = rocket.subview.extend({
 
-    el: '#index_page_lines'
+    el: '#notes_page_lines'
 
-    ,lineTemplate: _.template($('#template_index_lines').text())
+    ,lineTemplate: _.template($('#template_notes_lines').text())
 
     ,init: function(options){
         var me = this;
 
-        me.model = new rocket.model.article_list(
+        me.model = new rocket.model.lines(
             {}
             ,$.extend({}, me.options)
         );
@@ -39,17 +39,21 @@ rocket.subview.index_lines = rocket.subview.extend({
 
         switch(me.getRenderMode(model)){
             case 'APPEND':
-                console.log(data);
                 me.$el.append(
                     me.lineTemplate({
-                        articles: data 
+                        lines: data 
+                    })
+                );
+                console.log(
+                    me.lineTemplate({
+                        lines: data 
                     })
                 );
                 break;
             case 'PREPEND':
                 me.$el.prepend(
                     me.lineTemplate({
-                        articles: data 
+                        lines: data 
                     })
                 );
                 break;
@@ -102,8 +106,9 @@ rocket.subview.index_lines = rocket.subview.extend({
             if(me.isFirstLoad){
                 me.model.fetch({
                     reqdata: {
-                        from_article_id: 1
+                        line: 1
                         ,context_num: me.contextNum
+                        ,direction: 1
                     }
                 });
             }

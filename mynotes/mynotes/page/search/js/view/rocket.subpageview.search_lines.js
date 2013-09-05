@@ -1,21 +1,23 @@
 (function($){
 
-rocket.subview.index_lines = rocket.subview.extend({
+rocket.subpageview.search_lines = rocket.subpageview.extend({
 
-    el: '#index_page_lines'
+    className: 'search-page-lines'
 
-    ,lineTemplate: _.template($('#template_index_lines').text())
+    ,lineTemplate: _.template($('#template_search_lines').text())
 
     ,init: function(options){
         var me = this;
 
-        me.model = new rocket.model.article_list(
+        me.keywords = options.keywords;
+
+        me.model = new rocket.model.search_notes(
             {}
             ,$.extend({}, me.options)
         );
 
         me.isFirstLoad = true;
-        me.contextNum = 49;
+        me.contextNum = 1;
 
         me.$currentLine = null;
 
@@ -26,62 +28,35 @@ rocket.subview.index_lines = rocket.subview.extend({
         var me = this,
             ec = me.ec;
         
-        ec.on('pagebeforechange', me.onpagebeforechange, me);
-
         me.model.on('change', me.onmodelchange, me);
-
+    
         ec.on('keydown', me.onkeydown, me);
+    }
+
+    ,unregisterEvents: function(){
+        var me = this,
+            ec = me.ec;
+        
+        me.model.off('change', me.onmodelchange, me);
+    
+        ec.off('keydown', me.onkeydown, me);
     }
 
     ,render: function(model){
         var me = this,
             data = model.getData();
 
-        switch(me.getRenderMode(model)){
-            case 'APPEND':
-                console.log(data);
-                me.$el.append(
-                    me.lineTemplate({
-                        articles: data 
-                    })
-                );
-                break;
-            case 'PREPEND':
-                me.$el.prepend(
-                    me.lineTemplate({
-                        articles: data 
-                    })
-                );
-                break;
-        }
+        me.$el.append(
+            me.lineTemplate({
+                lines: data[1] 
+            })
+        );
 
+        console.log(data);
         if(me.isFirstLoad){
             me.isFirstLoad = false;
             me.hideLoading();
             me.highlightFirstLine();
-        }
-    }
-
-    ,getRenderMode: function(model){
-        var me = this,
-            data = model.getData(),
-            $lines = me.$('.line'),
-            firstLineNo,
-            lastLineNo;
-
-        if(!$lines.length){
-            return 'APPEND';
-        } 
-
-        firstLineNo = $lines.first().find('.line-number').text();
-        lastLineNo = $lines.last().find('.line-number').text();
-
-        if(data[0].article_id - 0 < firstLineNo - 0){
-            return 'PREPEND';
-        }
-
-        if(data[0].article_id - 0 > lastLineNo - 0){
-            return 'APPEND';
         }
     }
 
@@ -91,24 +66,31 @@ rocket.subview.index_lines = rocket.subview.extend({
         me.render(model);
     }
 
-    ,onpagebeforechange: function(params){
-        var me = this,
-            ec = me.ec,
-            from = params.from,
-            to = params.to,
-            param = params.params;
+    ,onsubpagebeforechange: function(params){          
+        var me = this,                                 
+            from = params.from,                        
+            to = params.to,                            
+            param = params.params,                     
+            featureString = me.getFeatureString(param);
 
-        if(to == ec){
-            if(me.isFirstLoad){
+        if(to == me.ec                                 
+            && featureString == me.featureString){     
+                                                       
+            if(me.isFirstLoad){                        
                 me.model.fetch({
                     reqdata: {
-                        from_article_id: 1
+                        key_words: me.keywords 
                         ,context_num: me.contextNum
+                        ,from: 1 
+                        ,count: 50 
                     }
                 });
             }
-            me.show();
+          
+            // @note: 平滑子页面，显示不隐藏
+            me.$el.show();                             
         }
+  
     }
 
     ,onkeydown: function(params){
@@ -127,9 +109,14 @@ rocket.subview.index_lines = rocket.subview.extend({
                 }
                 break;
 
+            // "h" key down
+            case 72:
+                me.goArticleList();
+                break;
+
             // "o" key down
             case 79:
-                me.goArticle();
+                // me.goArticleList();
                 break;
 
             // "j" key down
@@ -366,15 +353,11 @@ rocket.subview.index_lines = rocket.subview.extend({
         });
     }
 
-    ,goArticle: function(){
+    ,goArticleList: function(){
         var me = this;
-        if(me.$currentLine){
-            me.navigate([
-                '#article'
-                ,'/'
-                ,me.$currentLine.find('.line-number').text()
-            ].join(''));
-        }
+        me.navigate(
+            '#index'
+        );
     }
 
     ,startSearch: function(){

@@ -1,12 +1,12 @@
 (function($){
 
-rocket.model.article_list = rocket.model.extend({
+rocket.model.article = rocket.model.extend({
 
     initialize: function(attributes, options){
         var me = this;
 
         me.requestData = {
-            'from_article_id': 1
+            'article_id': options.articleid 
             ,'context_num': 25
         };
 
@@ -14,8 +14,8 @@ rocket.model.article_list = rocket.model.extend({
     }
 
     ,urlTemplate: _.template([
-        '/?tn=notes&act=getArticleAbstracts'
-        ,'from_article_id=<%= from_article_id %>'
+        '/?tn=notes&act=getNotesWithArticleID'
+        ,'article_id=<%= article_id %>'
         ,'context_num=<%= context_num %>'
     ].join('&'))
 
@@ -46,8 +46,8 @@ rocket.model.article_list = rocket.model.extend({
     }
 
     ,parse: function(resp, xhr){
-        this.data = resp[0];
-        return resp[0];
+        this.data = resp;
+        return resp;
     }
 
 });

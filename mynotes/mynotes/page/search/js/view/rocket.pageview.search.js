@@ -1,21 +1,33 @@
 (function($){
 
-rocket.pageview.index = rocket.pageview.extend({
+rocket.pageview.search = rocket.pageview.extend({
 
-    el: '#index_page'
+    el: '#search_page'
 
     ,init: function(options){
-        var me = this;
+        var me = this,
+            spm,
+            subView;
 
-        me.setup(new rocket.subview.index_header(
+        me.setup(new rocket.subview.search_header(
             $.extend({}, me.options)
             ,me
         ));
 
-        me.setup(new rocket.subview.index_lines(
+        spm = me.getSubpageManager({
+            subpageClass: rocket.subpageview.search_lines
+            ,maxSubpages: 2
+        });
+
+        subView = new rocket.subpageview.search_lines(
             $.extend({}, me.options)
             ,me
-        ));
+        );
+
+        me.append(subView);
+        spm.registerSubpage(me.featureString, subView);
+
+        me.showLoading(me.$el);
     }
 
     ,registerEvents: function(){

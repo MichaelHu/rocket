@@ -1,0 +1,21 @@
+<script type="text/html" id="template_search_lines">
+
+<% var last = 0; %>                                  
+<% for(var i=0; i<lines.length; i++){ %>
+    <% if(lines[i].line_num - last > 1){ %>
+        <% if(last != 0){ %>
+        </div>
+        <% } %>
+    <div class="line">
+    <% } %>
+<div class="inner-line"><div class="inner-line-number"><%=lines[i].line_num%></div><p><%= lines[i].text.replace(/\s/g, '&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') %></p></div>  
+    <% last = lines[i].line_num; %>
+<% } %>
+
+<% if(lines.length > 0){ %>
+    </div>
+<% } %>
+
+
+</script>
+
