@@ -10,9 +10,10 @@ rocket.router.mynotes = rocket.router.extend({
 
         '': 'index'
         ,'index': 'index'
-        ,'article/:articleid': 'article'
+        ,'article/:articleid(/:line)': 'article'
         ,'search/:keywords': 'search'
-        ,'notes/:line': 'notes'
+        ,'notes/:line(/:keywords)': 'notes'
+        ,'*default': 'index'
 
         /*
         '': 'index'
@@ -52,9 +53,12 @@ rocket.router.mynotes = rocket.router.extend({
         this.doAction('index', {});
     }
 
-    ,article: function(articleid) {
+    ,article: function(articleid, line/*optional*/) {
         this.doAction('article', {
             articleid: decodeURIComponent(articleid)
+            ,line: undefined === line 
+                ? ''
+                    : decodeURIComponent(line)
         });
     }
 
@@ -64,9 +68,12 @@ rocket.router.mynotes = rocket.router.extend({
         });
     }
 
-    ,notes: function(line) {
+    ,notes: function(line, keywords/*optional*/) {
         this.doAction('notes', {
             line: decodeURIComponent(line)
+            ,keywords: undefined === keywords 
+                ? ''
+                    : decodeURIComponent(keywords)
         });
     }
 

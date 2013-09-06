@@ -27,46 +27,106 @@
     left:0;
     right:0;
     height:40px;
+
+    -webkit-box-shadow:0px 0px 10px #000;
+}
+
+#search_page_header_tag{
+    /*绝对定位*/
+    position:absolute;
+
+    top:0;
+    left:0;
+    bottom:0;
+    right:310px;
+
+    margin-left:20px;
+    text-align:left;
+    font:bold 20px/40px Arial;
+}
+
+#search_page_header_pager{
+    /*绝对定位*/
+    position:absolute;
+
+    top:0;
+    bottom:0;
+    right:260px;
+    width:50px;
+}
+
+#search_page_header_pager .current{
+    /*绝对定位*/
+    position:absolute;
+
+    top:10px;
+    left:1px;
+    bottom:10px;
+    width:18px;
+
+    text-align:center;
+    font:normal 14px/20px Arial;
+    color:#f00;
+}
+
+#search_page_header_pager span{
+    padding-left:24px;
+    font:normal 14px/40px Arial;
+}
+
+#search_page_header_searchbox{
+    /*绝对定位*/
+    position:absolute;
+
+    top:0;
+    right:0;
+    bottom:0;
+    width:260px;
 }
 
 .search-page-lines{
     /*绝对定位*/
     position:absolute;
 
-    top:40px;
+    top:50px;
     left:0;
     right:0;
     bottom:0;
 
     overflow:scroll;
+
+    background-color:#000;
 }
 
 .search-page-lines *{
     -webkit-transform:translateZ(0);
 }
 
-.search-page-lines div.current-line{
-    background:#87AB4B;
-}
-
 .search-page-lines div.line {
     clear:both; 
     min-height:24px; 
     _height:24px;
+    background-color:#333;
     margin-bottom:20px;
+}
+
+.search-page-lines div.current-line{
+    background-color:#87AB4B;
 }
 
 .search-page-lines div.inner-line-number{
     float:left; 
     color:#ff0; 
-    font-style:italic; 
     cursor:pointer;
+    font:normal 12px/24px Arial;
 }
 
 .search-page-lines div.inner-line p{
     margin-left:48px; 
     padding-left:20px; 
     border-left:3px solid #4285F4;
+    color:#fff;
+    font:normal 14px/24px Arial;
 }
 
 .search-page-lines div.inner-line p{

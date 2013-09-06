@@ -1,34 +1,26 @@
 (function($){
 
-rocket.subpageview.search_lines = rocket.subpageview.extend({
+rocket.subpageview.notes_lines = rocket.subpageview.extend({
 
-    className: 'search-page-lines'
+    className: 'notes-page-lines'
 
-    ,lineTemplate: _.template($('#template_search_lines').text())
+    ,lineTemplate: _.template($('#template_notes_lines').text())
 
     ,init: function(options){
         var me = this;
 
-        me.keywords = options.keywords;
-
-        me.model = new rocket.model.search_notes(
+        me.model = new rocket.model.lines(
             {}
             ,$.extend({}, me.options)
         );
 
         me.isFirstLoad = true;
-        me.contextNum = 1;
-        me.countPerRequest = 20;
+
+        me.keywords = options.keywords;
+        me.fromLineNo = options.line;
+        me.contextNum = 9;
 
         me.$currentLine = null;
-
-        me.total = 0;
-
-        // 适用于翻页模式
-        me.currentFirst = 1;
-
-        // 适用于无限下拉模式
-        me.currentLast = 0;
 
         me.showLoading(me.$el);
     }
@@ -38,7 +30,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             ec = me.ec;
         
         me.model.on('change', me.onmodelchange, me);
-    
+
         ec.on('keydown', me.onkeydown, me);
     }
 
@@ -47,71 +39,68 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             ec = me.ec;
         
         me.model.off('change', me.onmodelchange, me);
-    
+
         ec.off('keydown', me.onkeydown, me);
     }
 
     ,render: function(model){
         var me = this,
-            lines = model.getLines(),
-            total = me.total,
-            reqCount = me.countPerRequest,
-            totalPages = Math.ceil(total / reqCount);
+            data = model.getData();
 
-        mynotes.helper.highlight(me.keywords, lines);
+        mynotes.helper.highlight(me.keywords, data);
 
-        me.$el.html(
-            me.lineTemplate({
-                lines: lines 
-            })
-        );
-
-        if(me.isFirstLoad){
-            me.isFirstLoad = false;
-            me.ec.trigger('pageinfochange', {
-                total: totalPages 
-                ,current: 1
-            });
+        switch(me.getRenderMode(model)){
+            case 'APPEND':
+                me.$el.append(
+                    me.lineTemplate({
+                        lines: data 
+                    })
+                );
+                break;
+            case 'PREPEND':
+                me.$el.prepend(
+                    me.lineTemplate({
+                        lines: data 
+                    })
+                );
+                break;
         }
-
-        me.hideLoading(500);
-        me.highlightFirstLine();
-        me.scrollIntoView();
-
-
-        /** 无限下拉模式适用
-        me.$el.append(
-            me.lineTemplate({
-                lines: lines 
-            })
-        );
 
         if(me.isFirstLoad){
             me.isFirstLoad = false;
             me.hideLoading();
             me.highlightFirstLine();
         }
-        */
+        else{
+            me.scrollIntoView();
+        }
+    }
+
+    ,getRenderMode: function(model){
+        var me = this,
+            data = model.getData(),
+            $lines = me.$('.line'),
+            firstLineNo,
+            lastLineNo;
+
+        if(!$lines.length){
+            return 'APPEND';
+        } 
+
+        firstLineNo = $lines.first().find('.line-number').text();
+        lastLineNo = $lines.last().find('.line-number').text();
+
+        if(data[0].line_num - 0 < firstLineNo - 0){
+            return 'PREPEND';
+        }
+
+        if(data[0].line_num - 0 > lastLineNo - 0){
+            return 'APPEND';
+        }
     }
 
     ,onmodelchange: function(model, xhr){
         var me = this; 
-
-        var curLast = me.currentLast,
-            reqCount = me.countPerRequest,
-            retCount = model.getLines().length;
-
-        me.total = model.getTotal();
-
-        // @note: 无限下拉模式
-        me.currentLast = retCount < reqCount 
-            ? curLast + retCount 
-            : curLast + reqCount;
-
-        // console.log([
-        //     me.total
-        //     ,me.currentLast
-        // ].join('_'));
 
         me.render(model);
     }
@@ -129,10 +118,9 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             if(me.isFirstLoad){                        
                 me.model.fetch({
                     reqdata: {
-                        key_words: me.keywords 
+                        line: me.fromLineNo 
                         ,context_num: me.contextNum
-                        ,from: 1 
-                        ,count: me.countPerRequest 
+                        ,direction: 1
                     }
                 });
             }
@@ -170,13 +158,13 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             // "h" key down
             case 72:
                 hit = true;
-                me.goArticleList();
+                me.goSearch();
                 break;
 
             // "o" key down
             case 79:
                 hit = true;
-                me.goNotes();
+                me.goArticle();
                 break;
 
             // "j" key down
@@ -189,18 +177,6 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             case 75:
                 hit = true;
                 me.goUp();
-                break;
-
-            // ", | <" key down
-            case 188:
-                hit = true;
-                me.goPrevPage();
-                break;
-
-            // ". | >" key down
-            case 190:
-                hit = true;
-                me.goNextPage();
                 break;
 
             // "/" key down
@@ -313,9 +289,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
 
         if(me.isArrivingEnd('next')){
             console.log('arriving tail...');
-
-            // @note: 暂关闭无限下拉模式，使用分页方式
-            // me.getMoreNext();
+            me.getMoreNext();
         }
     }
 
@@ -331,7 +305,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
 
         if(me.isArrivingEnd('prev')){
             console.log('arriving head...');
-            // me.getMorePrev();
+            me.getMorePrev();
         }
     }
 
@@ -395,125 +369,74 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
 
 
 
-    /** 
-     * 以下方法适用于翻页模式: goPage, goNextPage, goPrevPage
-     */
-    ,goPage: function(pageNo){
+
+
+
+
+    ,getMorePrev: function(){
         var me = this,
-            total = me.total,
-            reqCount = me.countPerRequest,
-            totalPages = Math.ceil(total / reqCount);
+            $firstLine = me.$('.line').first(),
+            lineID = 1; // 1-based
 
-        // @todo: mutex
-
-        if(pageNo > totalPages){
-            console.log('exceeds pages boundary');
-            return;
+        if($firstLine.length){
+            lineID = $firstLine.find('.line-number').text();
         }
 
-        me.showLoading(me.$el);
         me.model.fetch({
             reqdata: {
-                key_words: me.keywords 
+                line: lineID - me.contextNum - 1 
                 ,context_num: me.contextNum
-                ,from: (pageNo - 1) * reqCount + 1 
-                ,count: reqCount 
-            }
-            ,success: function(){
-                me.currentFirst = ( pageNo - 1 ) * reqCount + 1;
-
-                me.ec.trigger('pageinfochange', {
-                    total: totalPages 
-                    ,current: pageNo
-                });
+                ,direction: -1
             }
         });
     }
 
-    ,goNextPage: function(){
-        var me = this,
-            total = me.total,
-            curFirst = me.currentFirst,
-            reqCount = me.countPerRequest,
-            totalPages = Math.ceil(total / reqCount),
-            pageNo = Math.floor(curFirst / reqCount) + 1;
-
-        if(curFirst + reqCount > total){
-            console.log('no next page');
-            return;
-        }
-        
-        me.goPage(pageNo + 1);
-    }
-
-    ,goPrevPage: function(){
-        var me = this,
-            total = me.total,
-            curFirst = me.currentFirst,
-            reqCount = me.countPerRequest,
-            totalPages = Math.ceil(total / reqCount),
-            pageNo = Math.floor(curFirst / reqCount) + 1;
-
-        if(curFirst - reqCount < 1){
-            console.log('no prev page');
-            return;
-        }
-        
-        me.goPage(pageNo - 1);
-    }
-
-
-    
-    /** 
-     * 以下方法适用于无限下拉模式: getMoreNext 
-     */
     ,getMoreNext: function(){
         var me = this,
-            curLast = me.currentLast;
+            $lastLine = me.$('.line').last(),
+            lineID = 1; // 1-based
 
-        if(curLast >= me.total){
-            console.log('no more lines');
-            return;
+        if($lastLine.length){
+            lineID = $lastLine.find('.line-number').text();
         }
 
         me.model.fetch({
             reqdata: {
-                key_words: me.keywords 
+                line: lineID - 0 + 1 
                 ,context_num: me.contextNum
-                ,from: curLast + 1 
-                ,count: me.countPerRequest 
+                ,direction: 1
             }
         });
     }
 
-    ,goArticleList: function(){
-        var me = this;
-        setTimeout(function(){
-            me.navigate(
-                '#index'
-            );
-        }, 500);
+    ,goArticle: function(){
+        var me = this,
+            $currentLine = me.$currentLine;
+
+        if($currentLine){
+            setTimeout(function(){
+                me.navigate([
+                    '#article'
+                    ,'/'
+                    ,$currentLine.data('articleid')
+                    ,'/'
+                    ,$currentLine.find('.line-number').text()
+                ].join(''));
+            }, 500);
+        }
     }
 
-    ,goNotes: function(){
-        var me = this,
-            $currentLine = me.$currentLine,
-            innerLineNo = 1;
-
-        if(!$currentLine){
-            return;
+    ,goSearch: function(){
+        var me = this;
+        if(me.keywords){
+            setTimeout(function(){
+                me.navigate([
+                    '#search'
+                    ,'/'
+                    ,encodeURIComponent(me.keywords)
+                ].join(''));
+            }, 500);
         }
-
-        innerLineNo = $currentLine.find('.inner-line-number')
-            .text() - 0 + 1;
-
-        setTimeout(function(){
-            me.navigate([
-                '#notes'
-                , '/' + innerLineNo
-                , '/' + encodeURIComponent(me.keywords)
-            ].join(''));
-        }, 500);
     }
 
     ,startSearch: function(){

@@ -1,21 +1,14 @@
 (function($){
 
-rocket.subview.search_header = rocket.subview.extend({
+rocket.subview.search_header_pager = rocket.subview.extend({
 
-    el: '#search_page_header'
+    el: '#search_page_header_pager'
 
     ,init: function(options){
         var me = this;
 
-        me.appendTo(new rocket.subview.ui_searchbox(
-            $.extend({}, options)
-            ,me
-        ), '#search_page_header_searchbox');
-
-        me.append(new rocket.subview.search_header_pager(
-            $.extend({}, options)
-            ,me
-        ));
+        me.$current = me.$('input');
+        me.$total = me.$('span');
     }
 
     ,registerEvents: function(){
@@ -23,6 +16,7 @@ rocket.subview.search_header = rocket.subview.extend({
             ec = me.ec;
         
         ec.on('pagebeforechange', me.onpagebeforechange, me);
+        ec.on('pageinfochange', me.onpageinfochange, me);
     }
 
     ,onpagebeforechange: function(params){
@@ -35,6 +29,16 @@ rocket.subview.search_header = rocket.subview.extend({
         if(to == ec){
             me.show();
         }
+    }
+
+    ,onpageinfochange: function(params){
+        var me = this,
+            total = params.total,
+            current = params.current;
+
+        console.log(params);
+        me.$current.val(current);
+        me.$total.html('/ ' + total);
     }
 
 });

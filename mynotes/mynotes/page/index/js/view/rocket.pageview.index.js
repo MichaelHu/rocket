@@ -20,16 +20,24 @@ rocket.pageview.index = rocket.pageview.extend({
 
     ,registerEvents: function(){
         var me = this,
-            ec = me.ec;
+            ec = me.ec,
+            keydownLocking = false;
 
         $(document).on('keydown', function(e){
             // @note: only response in active page
             if(ec.isActivePage()
                 // @note: omit form keydown
-                && $(e.target).closest('form').length == 0){
+                && $(e.target).closest('form').length == 0
+                && !keydownLocking){
+                keydownLocking = true;
+
                 ec.trigger('keydown', {
                     event: e
                 });
+
+                setTimeout(function(){
+                    keydownLocking = false;
+                }, 100);
             }
         });
     }

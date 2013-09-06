@@ -7,10 +7,10 @@ rocket.subview.notes_header = rocket.subview.extend({
     ,init: function(options){
         var me = this;
 
-        me.append(new rocket.subview.ui_searchbox(
+        me.appendTo(new rocket.subview.ui_searchbox(
             $.extend({}, options)
             ,me
-        ));
+        ), '#notes_page_header_searchbox');
     }
 
     ,registerEvents: function(){

@@ -114,11 +114,13 @@ rocket.subview.index_lines = rocket.subview.extend({
     ,onkeydown: function(params){
         var me = this,
             e = params.event,
-            key = e.which; 
+            key = e.which,
+            hit = false; 
 
         switch(key){
             // "g" key down
             case 71:
+                hit = true;
                 if(e.shiftKey){
                     me.goLast();
                 }
@@ -129,26 +131,33 @@ rocket.subview.index_lines = rocket.subview.extend({
 
             // "o" key down
             case 79:
+                hit = true;
                 me.goArticle();
                 break;
 
             // "j" key down
             case 74:
+                hit = true;
                 me.goDown();
                 break;
 
             // "k" key down
             case 75:
+                hit = true;
                 me.goUp();
                 break;
 
             // "/" key down
             case 191:
+                hit = true;
                 me.startSearch();
-                e.preventDefault();
-                e.stopPropagation();
                 break;
 
+        }
+
+        if(hit){
+            e.preventDefault();
+            e.stopPropagation();
         }
     }
 
@@ -369,11 +378,13 @@ rocket.subview.index_lines = rocket.subview.extend({
     ,goArticle: function(){
         var me = this;
         if(me.$currentLine){
-            me.navigate([
-                '#article'
-                ,'/'
-                ,me.$currentLine.find('.line-number').text()
-            ].join(''));
+            setTimeout(function(){
+                me.navigate([
+                    '#article'
+                    ,'/'
+                    ,me.$currentLine.find('.line-number').text()
+                ].join(''));
+            }, 500);
         }
     }
 

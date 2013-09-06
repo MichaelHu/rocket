@@ -32,16 +32,26 @@ rocket.pageview.search = rocket.pageview.extend({
 
     ,registerEvents: function(){
         var me = this,
-            ec = me.ec;
+            ec = me.ec,
+            keydownLocking = false;
 
         $(document).on('keydown', function(e){
             // @note: only response in active page
             if(ec.isActivePage()
                 // @note: omit form keydown
-                && $(e.target).closest('form').length == 0){
+                && $(e.target).closest('form').length == 0
+                && !keydownLocking){
+                keydownLocking = true;
+
                 ec.trigger('keydown', {
                     event: e
+                    // @note: 用于定向派发和响应
+                    ,targetSubpage: me.subpageManager._currentSubpage  
                 });
+
+                setTimeout(function(){
+                    keydownLocking = false;
+                }, 100);
             }
         });
     }

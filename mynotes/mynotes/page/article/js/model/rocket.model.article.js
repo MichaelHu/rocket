@@ -7,7 +7,8 @@ rocket.model.article = rocket.model.extend({
 
         me.requestData = {
             'article_id': options.articleid 
-            ,'context_num': 25
+            // @note: request full text 
+            ,'context_num': 0
         };
 
         me.data = [];

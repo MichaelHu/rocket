@@ -17,7 +17,7 @@ rocket.model.search_notes = rocket.model.extend({
 
     ,urlTemplate: _.template([
         '/?tn=notes&act=searchNotes'
-        ,'key_words=<%= key_words %>'
+        ,'key_words=<%= encodeURIComponent(key_words) %>'
         ,'context_num=<%= context_num %>'
         ,'from=<%= from %>'
         ,'count=<%= count %>'
@@ -28,8 +28,16 @@ rocket.model.search_notes = rocket.model.extend({
         return me.urlTemplate(me.requestData); 
     }
 
-    ,getData: function(){
-        return this.data;
+    ,getLines: function(){
+        return this.data[1];
+    }
+
+    ,getKeywords: function(){
+        return this.data[2];
+    }
+
+    ,getTotal: function(){
+        return this.data[0].count;
     }
 
     ,fetch: function(options){

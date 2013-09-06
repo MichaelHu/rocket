@@ -10,6 +10,7 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
         var me = this;
 
         me.articleID = options.articleid;
+        me.initialLine = options.line;
 
         me.model = new rocket.model.article(
             {}
@@ -17,7 +18,8 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
         );
 
         me.isFirstLoad = true;
-        me.contextNum = 49;
+        // @note: request all lines of article
+        me.contextNum = 0;
 
         me.$currentLine = null;
 
@@ -72,7 +74,14 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
             });
             me.isFirstLoad = false;
             me.hideLoading();
-            me.highlightFirstLine();
+
+            if(me.initialLine){
+                me.highlightLine(me.initialLine);
+                me.scrollIntoView();
+            }
+            else{
+                me.highlightFirstLine();
+            }
         }
     }
 
@@ -134,11 +143,19 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
     ,onkeydown: function(params){
         var me = this,
             e = params.event,
-            key = e.which; 
+            targetSubpage = params.targetSubpage,
+            key = e.which,
+            hit = false; 
+
+        if(me != targetSubpage
+            || !me.isActiveSubpage()){
+            return;
+        }
 
         switch(key){
             // "g" key down
             case 71:
+                hit = true;
                 if(e.shiftKey){
                     me.goLast();
                 }
@@ -149,19 +166,27 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
 
             // "h" key down
             case 72:
-                me.goArticleList();
+                hit = true;
+                me.goBack();
                 break;
 
             // "j" key down
             case 74:
+                hit = true;
                 me.goDown();
                 break;
 
             // "k" key down
             case 75:
+                hit = true;
                 me.goUp();
                 break;
 
+        }
+
+        if(hit){
+            e.preventDefault();
+            e.stopPropagation();
         }
     }
 
@@ -193,7 +218,7 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
 
     ,highlightNextLine: function(){
         var me = this,
-            $lines = me.$('.line');
+            $lines = me.$('.line'),
             $currentLine = me.$currentLine;
 
         if(!$currentLine){
@@ -211,7 +236,7 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
 
     ,highlightPrevLine: function(){
         var me = this,
-            $lines = me.$('.line');
+            $lines = me.$('.line'),
             $currentLine = me.$currentLine;
 
         if(!$currentLine){
@@ -225,6 +250,34 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
             $prevLine.addClass('current-line');
             me.$currentLine = $prevLine;
         }
+    }
+
+    ,highlightLine: function(line){
+        var me = this,
+            $lines = me.$('.line'),
+            len = $lines.length,
+            $currentLine = me.$currentLine,
+            $line,
+            lineNo;
+
+        for(var i=0; i<len; i++){
+            $line = $($lines[i]); 
+            lineNo = $line.find('.line-number').text();
+            console.log(lineNo);
+            if(lineNo == line){
+                if($line != $currentLine){
+                    $currentLine && $currentLine.removeClass('current-line');
+                    $line.addClass('current-line');
+                    me.$currentLine = $line;
+                }
+                break;
+            }
+        }
+
+        if(i == len){
+            me.highlightFirstLine();
+        }
+
     }
 
     ,goFirst: function(){
@@ -379,11 +432,11 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
         });
     }
 
-    ,goArticleList: function(){
+    ,goBack: function(){
         var me = this;
-        me.navigate(
-            '#index'
-        );
+        setTimeout(function(){
+            history.back();
+        }, 500);
     }
 
 });

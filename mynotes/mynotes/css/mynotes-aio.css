@@ -15,6 +15,12 @@ body{
     bottom:0;
 }
 
+.key-word{
+    color:#d00;
+    font-weight:bold;
+    background-color:#ff0;
+}
+
 /*global*/
 @import url("./globalloading.css?__inline")
 @import url("./pageloading.css?__inline")

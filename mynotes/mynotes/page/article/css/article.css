@@ -28,13 +28,15 @@
     left:0;
     right:0;
     height:60px;
+
+    -webkit-box-shadow:0px 0px 10px #000;
 }
 
 #article_page_header h2{
     padding-left:10px;
 
     border:4px solid #36C4F1;
-    border-width:0 0 1px 3px;
+    border-width:0 0 0 5px;
     font:bold 20px/60px Arial;
 }
 
@@ -42,7 +44,7 @@
     /*绝对定位*/
     position:absolute;
 
-    top:61px;
+    top:70px;
     left:0;
     right:0;
     bottom:0;
@@ -64,6 +66,7 @@
 
 .article-page-lines div.current-line{
     border-color:#F3649C;
+    background-color:#ccc;
 }
 
 .article-page-lines div.line-number{
@@ -87,7 +90,6 @@
 }
 
 .article-page-lines div.current-line p{
-    font-weight:bold;
 }
 
 .article-page-lines div.current-line div.line-number{

@@ -8,7 +8,7 @@
         <% } %>
     <div class="line">
     <% } %>
-<div class="inner-line"><div class="inner-line-number"><%=lines[i].line_num%></div><p><%= lines[i].text.replace(/\s/g, '&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') %></p></div>  
+<div class="inner-line"><div class="inner-line-number"><%=lines[i].line_num%></div><p><%= lines[i].text %></p></div>  
     <% last = lines[i].line_num; %>
 <% } %>
 

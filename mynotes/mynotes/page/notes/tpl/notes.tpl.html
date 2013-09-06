@@ -1,6 +1,6 @@
 <script type="text/html" id="template_notes_lines">
     <%for(var i in lines){%>
-        <div class="line"><div class="line-number"><%=lines[i].line_num%></div><p><%- lines[i].text%></p></div>
+        <div class="line" data-articleid="<%= lines[i].article_id %>"><div class="line-number"><%=lines[i].line_num%></div><p><%= lines[i].text%></p></div>
     <%}%>
 </script>
 
