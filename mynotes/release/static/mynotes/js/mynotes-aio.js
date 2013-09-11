@@ -195,6 +195,34 @@ uibase.vimlikelist = {
         }
     }
 
+    ,highlightLine: function(line){
+        var me = this,
+            $lines = me.$('.line'),
+            len = $lines.length,
+            $currentLine = me.$currentLine,
+            $line,
+            lineNo;
+
+        for(var i=0; i<len; i++){
+            $line = $($lines[i]); 
+            lineNo = $line.find('.line-number').text();
+            console.log(lineNo);
+            if(lineNo == line){
+                if($line != $currentLine){
+                    $currentLine && $currentLine.removeClass('current-line');
+                    $line.addClass('current-line');
+                    me.$currentLine = $line;
+                }
+                break;
+            }
+        }
+
+        if(i == len){
+            me.highlightFirstLine();
+        }
+
+    }
+
     ,goFirst: function(){
         var me = this;
 
