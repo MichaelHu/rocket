@@ -19,6 +19,26 @@ A demo webapp, including outline page and slide page, which shows presentation c
 
 <http://258i.com/template/slider/slider.html>
 
+## mynotes
+
+A demo webapp, which provides vim-like operations. You can browse and search your notes. Operations list below:
+
+j: next line
+
+k: prev line
+
+o: open page releated to current line
+
+h: go prev page
+
+ctrl+d: next frame
+
+ctrl+u: prev frame
+
+/: focus searchbox
+
+<http://258i.com/template/mynotes/mynotes.html>
+
 ## other 
 
 coming soon ...
