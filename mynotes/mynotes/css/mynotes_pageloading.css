@@ -1,0 +1,32 @@
+.page-loading{
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background-color:#FFF;
+    z-index:1000;
+}
+
+.page-loading-text{
+    color: #888;
+    font: bold 14px/30px normal;
+}
+
+.page-loading-logo{
+    height:24px;
+    width:24px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    -webkit-box-orient:vertical;
+    -webkit-box-sizing:border-box;
+    background: url("../img/loading-eat.gif") 0 0 no-repeat;
+    background-size: 24px 24px;
+}
+

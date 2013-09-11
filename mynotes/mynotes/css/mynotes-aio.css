@@ -23,7 +23,7 @@ body{
 
 /*global*/
 @import url("./globalloading.css?__inline")
-@import url("./pageloading.css?__inline")
+@import url("./mynotes_pageloading.css?__inline")
 @import url("./ui_searchbox.css?__inline")
 
 /*page*/
