@@ -36,7 +36,7 @@ rocket.subview.search_header_pager = rocket.subview.extend({
             total = params.total,
             current = params.current;
 
-        console.log(params);
+        // console.log(params);
         me.$current.val(current);
         me.$total.html('/ ' + total);
     }

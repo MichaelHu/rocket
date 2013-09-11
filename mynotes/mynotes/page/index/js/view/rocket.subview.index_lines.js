@@ -1,6 +1,6 @@
 (function($){
 
-rocket.subview.index_lines = rocket.subview.extend({
+rocket.subview.index_lines = rocket.subview.uibase_vimlikelist.extend({
 
     el: '#index_page_lines'
 
@@ -39,7 +39,6 @@ rocket.subview.index_lines = rocket.subview.extend({
 
         switch(me.getRenderMode(model)){
             case 'APPEND':
-                console.log(data);
                 me.$el.append(
                     me.lineTemplate({
                         articles: data 
@@ -153,6 +152,22 @@ rocket.subview.index_lines = rocket.subview.extend({
                 me.startSearch();
                 break;
 
+            // "d" key down
+            case 68:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goNextFrame();
+                }
+                break;
+
+            // "u" key down
+            case 85:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goPrevFrame();
+                }
+                break;
+
         }
 
         if(hit){
@@ -160,184 +175,6 @@ rocket.subview.index_lines = rocket.subview.extend({
             e.stopPropagation();
         }
     }
-
-    ,highlightFirstLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $firstLine = $lines.first();
-
-        if($firstLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $firstLine.addClass('current-line');
-            me.$currentLine = $firstLine;
-        }
-    }
-
-    ,highlightLastLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $lastLine = $lines.last();
-
-        if($lastLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $lastLine.addClass('current-line');
-            me.$currentLine = $lastLine;
-        }
-    }
-
-    ,highlightNextLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $nextLine = $currentLine.next();
-
-        if($nextLine.length){
-            $currentLine.removeClass('current-line');
-            $nextLine.addClass('current-line');
-            me.$currentLine = $nextLine;
-        }
-    }
-
-    ,highlightPrevLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $prevLine = $currentLine.prev();
-
-        if($prevLine.length){
-            $currentLine.removeClass('current-line');
-            $prevLine.addClass('current-line');
-            me.$currentLine = $prevLine;
-        }
-    }
-
-    ,goFirst: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightFirstLine();
-        me.scrollIntoView();
-    }
-
-    ,goLast: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightLastLine();
-        me.scrollIntoView();
-    }
-
-    ,goDown: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightNextLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('next')){
-            console.log('arriving tail...');
-            me.getMoreNext();
-        }
-    }
-
-    ,goUp: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightPrevLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('prev')){
-            console.log('arriving head...');
-            me.getMorePrev();
-        }
-    }
-
-    ,scrollIntoView: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-        
-        var $line = me.$currentLine, 
-            viewHeight = me.$el.height(),
-            viewScrollTop = me.el.scrollTop,
-            lineTop = $line[0].offsetTop,
-            lineHeight = $line.height();
-
-        // console.log([
-        //     viewHeight
-        //     ,viewScrollTop
-        //     ,lineTop
-        //     ,lineHeight
-        // ].join('_'));
-
-        // @note: 当前行向下跑出视口
-        if(lineTop + lineHeight > viewHeight + viewScrollTop){
-            me.el.scrollTop = lineTop + lineHeight - viewHeight;
-        }
-        // @note: 当前行向上跑出视口
-        else if(lineTop < viewScrollTop){
-            me.el.scrollTop = lineTop;
-        }
-
-    }
-
-    // 是否接近两端
-    ,isArrivingEnd: function(direction){
-        var me = this,
-            $currentLine = me.$currentLine, 
-            i = 3;
-
-        if(!$currentLine.length
-            || direction != 'prev'
-                && direction != 'next'){
-            return false;
-        }
-
-        while(i > 0){
-            $currentLine = $currentLine[direction]();   
-            if($currentLine.length == 0){
-                break;
-            }
-            i--;
-        } 
-
-        // 距两端3行时触发
-        if(i == 1){
-            return true;
-        }
-        return false;
-    }
-
-
-
-
 
 
 

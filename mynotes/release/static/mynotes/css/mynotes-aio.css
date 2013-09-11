@@ -71,12 +71,6 @@ body{
 }
 
 
-@-webkit-keyframes loading-anim {
-    0% {-webkit-transform: rotate(0);}
-    50% {-webkit-transform: rotate(180deg);}
-    100% {-webkit-transform: rotate(360deg);}
-}
-
 .page-loading{
     position:absolute;
     left:0;
@@ -84,7 +78,7 @@ body{
     right:0;
     bottom:0;
     display:-webkit-box;
-    -webkit-box-pack:start;
+    -webkit-box-pack:center;
     -webkit-box-align:center;
     -webkit-box-orient:vertical;
     -webkit-box-sizing:border-box;
@@ -92,30 +86,21 @@ body{
     z-index:1000;
 }
 
-.page-loading-anim{
-    height:50px;
-    width:50px;
-    -webkit-animation: loading-anim 2s linear infinite;
-    background:url("/static/mynotes/img/rotating.png") 0 0 no-repeat;
-    background-size: 50px 50px;
-}
-
 .page-loading-text{
     color: #888;
-    font: bold 16px/30px normal;
+    font: bold 14px/30px normal;
 }
 
 .page-loading-logo{
-    margin-top:120px;
-    height:66px;
-    width:66px;
+    height:24px;
+    width:24px;
     display:-webkit-box;
     -webkit-box-pack:center;
     -webkit-box-align:center;
     -webkit-box-orient:vertical;
     -webkit-box-sizing:border-box;
-    background: url("/static/mynotes/img/loading-logo-news.png") 0 0 no-repeat;
-    background-size: 65px 65px;
+    background: url("/static/mynotes/img/loading-eat.gif") 0 0 no-repeat;
+    background-size: 24px 24px;
 }
 
 

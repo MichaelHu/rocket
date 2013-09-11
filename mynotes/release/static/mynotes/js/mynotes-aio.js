@@ -88,6 +88,267 @@ $.extend(helper, {
 })(Zepto);
 
 
+(function($){
+
+var mynotes = window.mynotes = window.mynotes || {},
+    uibase = mynotes.uibase 
+        = mynotes.uibase || {};
+
+
+uibase.vimlikelist = {
+
+    $currentLine: null
+
+    ,highlightFirstLine: function(){
+        var me = this,
+            $lines = me.$('.line'),
+            $firstLine = $lines.first();
+
+        if($firstLine.length){
+            me.$currentLine 
+                && me.$currentLine.removeClass('current-line');
+            $firstLine.addClass('current-line');
+            me.$currentLine = $firstLine;
+        }
+    }
+
+    ,highlightLastLine: function(){
+        var me = this,
+            $lines = me.$('.line'),
+            $lastLine = $lines.last();
+
+        if($lastLine.length){
+            me.$currentLine 
+                && me.$currentLine.removeClass('current-line');
+            $lastLine.addClass('current-line');
+            me.$currentLine = $lastLine;
+        }
+    }
+
+    ,highlightNextLine: function(){
+        var me = this;
+        me.highlightNextXLine(1);
+    }
+
+    ,highlightNextXLine: function(x){
+        var me = this,
+            $lines = me.$('.line');
+            $currentLine = me.$currentLine;
+
+        if(!$currentLine){
+            return;
+        }
+
+        var $nextLine = $currentLine,
+            $lastValidLine = $currentLine,
+            total = x;
+
+        while(total > 0){
+            $lastValidLine = $nextLine;
+            $nextLine = $nextLine.next();
+            if(!$nextLine.length){
+                $nextLine = $lastValidLine;
+                break;
+            }
+            total--;
+        }
+
+        if(total < x){
+            $currentLine.removeClass('current-line');
+            $nextLine.addClass('current-line');
+            me.$currentLine = $nextLine;
+        }
+    }
+
+    ,highlightPrevLine: function(){
+        var me = this;
+        me.highlightPrevXLine(1);
+    }
+
+    ,highlightPrevXLine: function(x){
+        var me = this,
+            $lines = me.$('.line');
+            $currentLine = me.$currentLine;
+
+        if(!$currentLine){
+            return;
+        }
+
+        var $prevLine = $currentLine,
+            $lastValidLine = $currentLine,
+            total = x;
+
+        while(total > 0){
+            $lastValidLine = $prevLine;
+            $prevLine = $prevLine.prev();
+            if(!$prevLine.length){
+                $prevLine = $lastValidLine;
+                break;
+            }
+            total--;
+        }
+
+        if(total < x){
+            $currentLine.removeClass('current-line');
+            $prevLine.addClass('current-line');
+            me.$currentLine = $prevLine;
+        }
+    }
+
+    ,goFirst: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+
+        me.highlightFirstLine();
+        me.scrollIntoView();
+    }
+
+    ,goLast: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+
+        me.highlightLastLine();
+        me.scrollIntoView();
+    }
+
+    ,goDown: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+
+        me.highlightNextLine();
+        me.scrollIntoView();
+
+        if(me.isArrivingEnd('next')){
+            // console.log('arriving tail...');
+            me.getMoreNext();
+        }
+    }
+
+    ,goUp: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+
+        me.highlightPrevLine();
+        me.scrollIntoView();
+
+        if(me.isArrivingEnd('prev')){
+            // console.log('arriving head...');
+            me.getMorePrev();
+        }
+    }
+
+    ,goNextFrame: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+
+        me.highlightNextXLine(me.linesPerFrame || 10);
+        me.scrollIntoView();
+
+        if(me.isArrivingEnd('next')){
+            // console.log('arriving tail...');
+            me.getMoreNext();
+        }
+    }
+
+    ,goPrevFrame: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+
+        me.highlightPrevXLine(me.linesPerFrame || 10);
+        me.scrollIntoView();
+
+        if(me.isArrivingEnd('prev')){
+            // console.log('arriving head...');
+            me.getMorePrev();
+        }
+    }
+
+    ,scrollIntoView: function(){
+        var me = this;
+
+        if(!me.$currentLine){
+            return;
+        }
+        
+        var $line = me.$currentLine, 
+            viewHeight = me.$el.height(),
+            viewScrollTop = me.el.scrollTop,
+            lineTop = $line[0].offsetTop,
+            lineHeight = $line.height();
+
+        // console.log([
+        //     viewHeight
+        //     ,viewScrollTop
+        //     ,lineTop
+        //     ,lineHeight
+        // ].join('_'));
+
+        // @note: 当前行向下跑出视口
+        if(lineTop + lineHeight > viewHeight + viewScrollTop){
+            me.el.scrollTop = lineTop + lineHeight - viewHeight;
+        }
+        // @note: 当前行向上跑出视口
+        else if(lineTop < viewScrollTop){
+            me.el.scrollTop = lineTop;
+        }
+
+    }
+
+    // 是否接近两端
+    ,isArrivingEnd: function(direction){
+        var me = this,
+            $currentLine = me.$currentLine, 
+            i = 1;
+
+        if(!$currentLine.length
+            || direction != 'prev'
+                && direction != 'next'){
+            return false;
+        }
+
+        while(i > 0){
+            $currentLine = $currentLine[direction]();   
+            if($currentLine.length == 0){
+                break;
+            }
+            i--;
+        } 
+
+        // 距两端3行时触发
+        if(i == 1){
+            return true;
+        }
+        return false;
+    }
+
+    ,getMorePrev: function(){}
+
+    ,getMoreNext: function(){}
+
+};
+
+
+})(Zepto);
+
+
 (function($) {
 
 $.extend(rocket, {
@@ -223,6 +484,15 @@ rocket.router.mynotes = rocket.router.extend({
 
 (function($){
 
+rocket.subpageview.uibase_vimlikelist = rocket.subpageview.extend(
+    mynotes.uibase.vimlikelist
+);
+
+})(Zepto);
+
+
+(function($){
+
 
 rocket.subview.ui_searchbox = rocket.subview.extend({
 
@@ -332,6 +602,15 @@ rocket.subview.ui_searchbox = rocket.subview.extend({
 });
 
 
+
+})(Zepto);
+
+
+(function($){
+
+rocket.subview.uibase_vimlikelist = rocket.subview.extend(
+    mynotes.uibase.vimlikelist
+);
 
 })(Zepto);
 
@@ -458,7 +737,8 @@ rocket.pageview.article = rocket.pageview.extend({
 
 (function($){
 
-rocket.subpageview.article_lines = rocket.subpageview.extend({
+rocket.subpageview.article_lines 
+    = rocket.subpageview.uibase_vimlikelist.extend({
 
     className: 'article-page-lines'
 
@@ -510,7 +790,6 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
 
         switch(me.getRenderMode(model)){
             case 'APPEND':
-                console.log(data);
                 me.$el.append(
                     me.lineTemplate({
                         lines: data[1]
@@ -640,254 +919,28 @@ rocket.subpageview.article_lines = rocket.subpageview.extend({
                 me.goUp();
                 break;
 
+            // "d" key down
+            case 68:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goNextFrame();
+                }
+                break;
+
+            // "u" key down
+            case 85:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goPrevFrame();
+                }
+                break;
+
         }
 
         if(hit){
             e.preventDefault();
             e.stopPropagation();
         }
-    }
-
-    ,highlightFirstLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $firstLine = $lines.first();
-
-        if($firstLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $firstLine.addClass('current-line');
-            me.$currentLine = $firstLine;
-        }
-    }
-
-    ,highlightLastLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $lastLine = $lines.last();
-
-        if($lastLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $lastLine.addClass('current-line');
-            me.$currentLine = $lastLine;
-        }
-    }
-
-    ,highlightNextLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $nextLine = $currentLine.next();
-
-        if($nextLine.length){
-            $currentLine.removeClass('current-line');
-            $nextLine.addClass('current-line');
-            me.$currentLine = $nextLine;
-        }
-    }
-
-    ,highlightPrevLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $prevLine = $currentLine.prev();
-
-        if($prevLine.length){
-            $currentLine.removeClass('current-line');
-            $prevLine.addClass('current-line');
-            me.$currentLine = $prevLine;
-        }
-    }
-
-    ,highlightLine: function(line){
-        var me = this,
-            $lines = me.$('.line'),
-            len = $lines.length,
-            $currentLine = me.$currentLine,
-            $line,
-            lineNo;
-
-        for(var i=0; i<len; i++){
-            $line = $($lines[i]); 
-            lineNo = $line.find('.line-number').text();
-            console.log(lineNo);
-            if(lineNo == line){
-                if($line != $currentLine){
-                    $currentLine && $currentLine.removeClass('current-line');
-                    $line.addClass('current-line');
-                    me.$currentLine = $line;
-                }
-                break;
-            }
-        }
-
-        if(i == len){
-            me.highlightFirstLine();
-        }
-
-    }
-
-    ,goFirst: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightFirstLine();
-        me.scrollIntoView();
-    }
-
-    ,goLast: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightLastLine();
-        me.scrollIntoView();
-    }
-
-    ,goDown: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightNextLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('next')){
-            console.log('arriving tail...');
-            // me.getMoreNext();
-        }
-    }
-
-    ,goUp: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightPrevLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('prev')){
-            console.log('arriving head...');
-            // me.getMorePrev();
-        }
-    }
-
-    ,scrollIntoView: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-        
-        var $line = me.$currentLine, 
-            viewHeight = me.$el.height(),
-            viewScrollTop = me.el.scrollTop,
-            lineTop = $line[0].offsetTop,
-            lineHeight = $line.height();
-
-        // console.log([
-        //     viewHeight
-        //     ,viewScrollTop
-        //     ,lineTop
-        //     ,lineHeight
-        // ].join('_'));
-
-        // @note: 当前行向下跑出视口
-        if(lineTop + lineHeight > viewHeight + viewScrollTop){
-            me.el.scrollTop = lineTop + lineHeight - viewHeight;
-        }
-        // @note: 当前行向上跑出视口
-        else if(lineTop < viewScrollTop){
-            me.el.scrollTop = lineTop;
-        }
-
-    }
-
-    // 是否接近两端
-    ,isArrivingEnd: function(direction){
-        var me = this,
-            $currentLine = me.$currentLine, 
-            i = 3;
-
-        if(!$currentLine.length
-            || direction != 'prev'
-                && direction != 'next'){
-            return false;
-        }
-
-        while(i > 0){
-            $currentLine = $currentLine[direction]();   
-            if($currentLine.length == 0){
-                break;
-            }
-            i--;
-        } 
-
-        // 距两端3行时触发
-        if(i == 1){
-            return true;
-        }
-        return false;
-    }
-
-
-
-
-
-
-
-    ,getMorePrev: function(){
-        var me = this,
-            $firstLine = me.$('.line').first(),
-            articleID = 0; // 1-based
-
-        if($firstLine.length){
-            articleID = $firstLine.find('.line-number').text();
-        }
-
-        me.model.fetch({
-            reqdata: {
-                article_id: me.articleID 
-                ,context_num: me.contextNum
-            }
-        });
-    }
-
-    ,getMoreNext: function(){
-        var me = this,
-            $lastLine = me.$('.line').last(),
-            articleID = 0; // 1-based
-
-        if($lastLine.length){
-            articleID = $lastLine.find('.line-number').text();
-        }
-
-        me.model.fetch({
-            reqdata: {
-                from_article_id: articleID - 0 + 1 
-                ,context_num: me.contextNum
-            }
-        });
     }
 
     ,goBack: function(){
@@ -1139,7 +1192,7 @@ rocket.subview.index_header = rocket.subview.extend({
 
 (function($){
 
-rocket.subview.index_lines = rocket.subview.extend({
+rocket.subview.index_lines = rocket.subview.uibase_vimlikelist.extend({
 
     el: '#index_page_lines'
 
@@ -1178,7 +1231,6 @@ rocket.subview.index_lines = rocket.subview.extend({
 
         switch(me.getRenderMode(model)){
             case 'APPEND':
-                console.log(data);
                 me.$el.append(
                     me.lineTemplate({
                         articles: data 
@@ -1292,6 +1344,22 @@ rocket.subview.index_lines = rocket.subview.extend({
                 me.startSearch();
                 break;
 
+            // "d" key down
+            case 68:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goNextFrame();
+                }
+                break;
+
+            // "u" key down
+            case 85:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goPrevFrame();
+                }
+                break;
+
         }
 
         if(hit){
@@ -1299,184 +1367,6 @@ rocket.subview.index_lines = rocket.subview.extend({
             e.stopPropagation();
         }
     }
-
-    ,highlightFirstLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $firstLine = $lines.first();
-
-        if($firstLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $firstLine.addClass('current-line');
-            me.$currentLine = $firstLine;
-        }
-    }
-
-    ,highlightLastLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $lastLine = $lines.last();
-
-        if($lastLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $lastLine.addClass('current-line');
-            me.$currentLine = $lastLine;
-        }
-    }
-
-    ,highlightNextLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $nextLine = $currentLine.next();
-
-        if($nextLine.length){
-            $currentLine.removeClass('current-line');
-            $nextLine.addClass('current-line');
-            me.$currentLine = $nextLine;
-        }
-    }
-
-    ,highlightPrevLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $prevLine = $currentLine.prev();
-
-        if($prevLine.length){
-            $currentLine.removeClass('current-line');
-            $prevLine.addClass('current-line');
-            me.$currentLine = $prevLine;
-        }
-    }
-
-    ,goFirst: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightFirstLine();
-        me.scrollIntoView();
-    }
-
-    ,goLast: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightLastLine();
-        me.scrollIntoView();
-    }
-
-    ,goDown: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightNextLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('next')){
-            console.log('arriving tail...');
-            me.getMoreNext();
-        }
-    }
-
-    ,goUp: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightPrevLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('prev')){
-            console.log('arriving head...');
-            me.getMorePrev();
-        }
-    }
-
-    ,scrollIntoView: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-        
-        var $line = me.$currentLine, 
-            viewHeight = me.$el.height(),
-            viewScrollTop = me.el.scrollTop,
-            lineTop = $line[0].offsetTop,
-            lineHeight = $line.height();
-
-        // console.log([
-        //     viewHeight
-        //     ,viewScrollTop
-        //     ,lineTop
-        //     ,lineHeight
-        // ].join('_'));
-
-        // @note: 当前行向下跑出视口
-        if(lineTop + lineHeight > viewHeight + viewScrollTop){
-            me.el.scrollTop = lineTop + lineHeight - viewHeight;
-        }
-        // @note: 当前行向上跑出视口
-        else if(lineTop < viewScrollTop){
-            me.el.scrollTop = lineTop;
-        }
-
-    }
-
-    // 是否接近两端
-    ,isArrivingEnd: function(direction){
-        var me = this,
-            $currentLine = me.$currentLine, 
-            i = 3;
-
-        if(!$currentLine.length
-            || direction != 'prev'
-                && direction != 'next'){
-            return false;
-        }
-
-        while(i > 0){
-            $currentLine = $currentLine[direction]();   
-            if($currentLine.length == 0){
-                break;
-            }
-            i--;
-        } 
-
-        // 距两端3行时触发
-        if(i == 1){
-            return true;
-        }
-        return false;
-    }
-
-
-
-
 
 
 
@@ -1661,7 +1551,8 @@ rocket.pageview.notes = rocket.pageview.extend({
 
 (function($){
 
-rocket.subpageview.notes_lines = rocket.subpageview.extend({
+rocket.subpageview.notes_lines 
+    = rocket.subpageview.uibase_vimlikelist.extend({
 
     className: 'notes-page-lines'
 
@@ -1846,6 +1737,22 @@ rocket.subpageview.notes_lines = rocket.subpageview.extend({
                 me.startSearch();
                 break;
 
+            // "d" key down
+            case 68:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goNextFrame();
+                }
+                break;
+
+            // "u" key down
+            case 85:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goPrevFrame();
+                }
+                break;
+
         }
 
         if(hit){
@@ -1853,185 +1760,6 @@ rocket.subpageview.notes_lines = rocket.subpageview.extend({
             e.stopPropagation();
         }
     }
-
-    ,highlightFirstLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $firstLine = $lines.first();
-
-        if($firstLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $firstLine.addClass('current-line');
-            me.$currentLine = $firstLine;
-        }
-    }
-
-    ,highlightLastLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $lastLine = $lines.last();
-
-        if($lastLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $lastLine.addClass('current-line');
-            me.$currentLine = $lastLine;
-        }
-    }
-
-    ,highlightNextLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $nextLine = $currentLine.next();
-
-        if($nextLine.length){
-            $currentLine.removeClass('current-line');
-            $nextLine.addClass('current-line');
-            me.$currentLine = $nextLine;
-        }
-    }
-
-    ,highlightPrevLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $prevLine = $currentLine.prev();
-
-        if($prevLine.length){
-            $currentLine.removeClass('current-line');
-            $prevLine.addClass('current-line');
-            me.$currentLine = $prevLine;
-        }
-    }
-
-    ,goFirst: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightFirstLine();
-        me.scrollIntoView();
-    }
-
-    ,goLast: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightLastLine();
-        me.scrollIntoView();
-    }
-
-    ,goDown: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightNextLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('next')){
-            console.log('arriving tail...');
-            me.getMoreNext();
-        }
-    }
-
-    ,goUp: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightPrevLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('prev')){
-            console.log('arriving head...');
-            me.getMorePrev();
-        }
-    }
-
-    ,scrollIntoView: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-        
-        var $line = me.$currentLine, 
-            viewHeight = me.$el.height(),
-            viewScrollTop = me.el.scrollTop,
-            lineTop = $line[0].offsetTop,
-            lineHeight = $line.height();
-
-        // console.log([
-        //     viewHeight
-        //     ,viewScrollTop
-        //     ,lineTop
-        //     ,lineHeight
-        // ].join('_'));
-
-        // @note: 当前行向下跑出视口
-        if(lineTop + lineHeight > viewHeight + viewScrollTop){
-            me.el.scrollTop = lineTop + lineHeight - viewHeight;
-        }
-        // @note: 当前行向上跑出视口
-        else if(lineTop < viewScrollTop){
-            me.el.scrollTop = lineTop;
-        }
-
-    }
-
-    // 是否接近两端
-    ,isArrivingEnd: function(direction){
-        var me = this,
-            $currentLine = me.$currentLine, 
-            i = 3;
-
-        if(!$currentLine.length
-            || direction != 'prev'
-                && direction != 'next'){
-            return false;
-        }
-
-        while(i > 0){
-            $currentLine = $currentLine[direction]();   
-            if($currentLine.length == 0){
-                break;
-            }
-            i--;
-        } 
-
-        // 距两端3行时触发
-        if(i == 1){
-            return true;
-        }
-        return false;
-    }
-
-
-
-
-
 
 
     ,getMorePrev: function(){
@@ -2320,7 +2048,8 @@ rocket.pageview.search = rocket.pageview.extend({
 
 (function($){
 
-rocket.subpageview.search_lines = rocket.subpageview.extend({
+rocket.subpageview.search_lines
+    = rocket.subpageview.uibase_vimlikelist.extend({
 
     className: 'search-page-lines'
 
@@ -2341,6 +2070,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
         me.countPerRequest = 20;
 
         me.$currentLine = null;
+        me.linesPerFrame = 2;
 
         me.total = 0;
 
@@ -2529,6 +2259,22 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
                 me.startSearch();
                 break;
 
+            // "d" key down
+            case 68:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goNextFrame();
+                }
+                break;
+
+            // "u" key down
+            case 85:
+                if(e.ctrlKey){
+                    hit = true;
+                    me.goPrevFrame();
+                }
+                break;
+
         }
 
         if(hit){
@@ -2536,183 +2282,6 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             e.stopPropagation();
         }
     }
-
-    ,highlightFirstLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $firstLine = $lines.first();
-
-        if($firstLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $firstLine.addClass('current-line');
-            me.$currentLine = $firstLine;
-        }
-    }
-
-    ,highlightLastLine: function(){
-        var me = this,
-            $lines = me.$('.line'),
-            $lastLine = $lines.last();
-
-        if($lastLine.length){
-            me.$currentLine 
-                && me.$currentLine.removeClass('current-line');
-            $lastLine.addClass('current-line');
-            me.$currentLine = $lastLine;
-        }
-    }
-
-    ,highlightNextLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $nextLine = $currentLine.next();
-
-        if($nextLine.length){
-            $currentLine.removeClass('current-line');
-            $nextLine.addClass('current-line');
-            me.$currentLine = $nextLine;
-        }
-    }
-
-    ,highlightPrevLine: function(){
-        var me = this,
-            $lines = me.$('.line');
-            $currentLine = me.$currentLine;
-
-        if(!$currentLine){
-            return;
-        }
-
-        var $prevLine = $currentLine.prev();
-
-        if($prevLine.length){
-            $currentLine.removeClass('current-line');
-            $prevLine.addClass('current-line');
-            me.$currentLine = $prevLine;
-        }
-    }
-
-    ,goFirst: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightFirstLine();
-        me.scrollIntoView();
-    }
-
-    ,goLast: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightLastLine();
-        me.scrollIntoView();
-    }
-
-    ,goDown: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightNextLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('next')){
-            console.log('arriving tail...');
-
-            // @note: 暂关闭无限下拉模式，使用分页方式
-            // me.getMoreNext();
-        }
-    }
-
-    ,goUp: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-
-        me.highlightPrevLine();
-        me.scrollIntoView();
-
-        if(me.isArrivingEnd('prev')){
-            console.log('arriving head...');
-            // me.getMorePrev();
-        }
-    }
-
-    ,scrollIntoView: function(){
-        var me = this;
-
-        if(!me.$currentLine){
-            return;
-        }
-        
-        var $line = me.$currentLine, 
-            viewHeight = me.$el.height(),
-            viewScrollTop = me.el.scrollTop,
-            lineTop = $line[0].offsetTop,
-            lineHeight = $line.height();
-
-        // console.log([
-        //     viewHeight
-        //     ,viewScrollTop
-        //     ,lineTop
-        //     ,lineHeight
-        // ].join('_'));
-
-        // @note: 当前行向下跑出视口
-        if(lineTop + lineHeight > viewHeight + viewScrollTop){
-            me.el.scrollTop = lineTop + lineHeight - viewHeight;
-        }
-        // @note: 当前行向上跑出视口
-        else if(lineTop < viewScrollTop){
-            me.el.scrollTop = lineTop;
-        }
-
-    }
-
-    // 是否接近两端
-    ,isArrivingEnd: function(direction){
-        var me = this,
-            $currentLine = me.$currentLine, 
-            i = 3;
-
-        if(!$currentLine.length
-            || direction != 'prev'
-                && direction != 'next'){
-            return false;
-        }
-
-        while(i > 0){
-            $currentLine = $currentLine[direction]();   
-            if($currentLine.length == 0){
-                break;
-            }
-            i--;
-        } 
-
-        // 距两端3行时触发
-        if(i == 1){
-            return true;
-        }
-        return false;
-    }
-
 
 
     /** 
@@ -2727,7 +2296,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
         // @todo: mutex
 
         if(pageNo > totalPages){
-            console.log('exceeds pages boundary');
+            // console.log('exceeds pages boundary');
             return;
         }
 
@@ -2759,7 +2328,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             pageNo = Math.floor(curFirst / reqCount) + 1;
 
         if(curFirst + reqCount > total){
-            console.log('no next page');
+            // console.log('no next page');
             return;
         }
         
@@ -2775,7 +2344,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             pageNo = Math.floor(curFirst / reqCount) + 1;
 
         if(curFirst - reqCount < 1){
-            console.log('no prev page');
+            // console.log('no prev page');
             return;
         }
         
@@ -2786,7 +2355,8 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
     
     /** 
      * 以下方法适用于无限下拉模式: getMoreNext 
-     */
+     * 暂时不用
+
     ,getMoreNext: function(){
         var me = this,
             curLast = me.currentLast;
@@ -2805,6 +2375,7 @@ rocket.subpageview.search_lines = rocket.subpageview.extend({
             }
         });
     }
+    */
 
     ,goArticleList: function(){
         var me = this;
@@ -2926,7 +2497,7 @@ rocket.subview.search_header_pager = rocket.subview.extend({
             total = params.total,
             current = params.current;
 
-        console.log(params);
+        // console.log(params);
         me.$current.val(current);
         me.$total.html('/ ' + total);
     }
