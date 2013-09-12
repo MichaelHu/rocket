@@ -1,5 +1,5 @@
 % 事件中心 
-% hudamin@baidu.com
+% hdm258i@gmail.com
 % 2013-04-02
 % 进阶, webapp框架
 
@@ -40,6 +40,9 @@ Backbone.Event提供了事件交互机制的支持，使用事件交互，使功
         me.model.on('change', me.render, me);
     }
     ...
+
+
+## 子页面事件中心
 
 
 ## 预定义事件和处理函数
