@@ -269,6 +269,10 @@ rocket.baseview = Backbone.View.extend({
             delete me.parent.children[me.cid];
             // @todo: 从subpages里清除
         }
+		this.__proto__ = null;
+		for(var i in this){
+			delete this[i];
+		}
     }
 
     // 事件注册，子类重写之
