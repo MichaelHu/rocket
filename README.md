@@ -37,6 +37,10 @@ ctrl+u: prev frame
 
 /: focus searchbox
 
+,: next page ( search result page )
+
+.: prev page ( search result page )
+
 <http://258i.com/template/mynotes/mynotes.html>
 
 ## other 
