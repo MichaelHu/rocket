@@ -27,8 +27,8 @@ Developers can also create a webapp through Scaffold Code in minutes.
 
 PS: Make sure you browse sites below **using appropriate devices**.
 
-1. iPhone and Android Phone Version: <http://m.baidu.com/news>
-2. iPad Version: <http://m.baidu.com/news>
+1. iPad Version: <http://m.baidu.com/news>
+2. iPhone and Android Phone Version: <http://m.baidu.com/news>
 3. iPhone and Android Phone Version: <http://m.baidu.com/video>
 4. iPad Version: <http://m.baidu.com/video>
 5. others will be coming soon
