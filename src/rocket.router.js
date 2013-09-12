@@ -1,3 +1,4 @@
+// rocket.router.js
 /**
  * Router类，监听URL变化，并作转发
  * 产品线需继承rocket.router类

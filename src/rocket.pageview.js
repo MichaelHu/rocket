@@ -1,3 +1,4 @@
+// rocket.pageview.js
 /**
  * pageview类，页面视图控制器，充当页面事件中心
  */

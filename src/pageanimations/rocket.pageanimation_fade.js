@@ -1,3 +1,4 @@
+// rocket.pageanimation_fade.js
 (function($) {
 
     rocket.pageanimation_fade = {};

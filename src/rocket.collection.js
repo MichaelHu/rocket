@@ -1,3 +1,4 @@
+// rocket.collection.js
 /**
  * Collection类
  */

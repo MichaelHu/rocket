@@ -1,3 +1,4 @@
+// rocket.subpagemanager.js
 (function($) {
 
 // @todo: subpage positon retain

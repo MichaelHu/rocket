@@ -1,3 +1,4 @@
+// rocket.baseview.js
 /**
  * View基类，控制展现逻辑，充当控制器的角色
  */
