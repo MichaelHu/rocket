@@ -21,7 +21,7 @@ A demo webapp, including outline page and slide page, which shows presentation c
 
 ## mynotes
 
-A demo webapp, which provides vim-like operations. You can browse and search your notes. Operations list below:
+A demo webapp, which provides vim-like keyboard operations. You can browse and search your notes. Keyboard operations list below:
 
 j: next line
 
