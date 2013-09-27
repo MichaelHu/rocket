@@ -1,11 +1,11 @@
-% webapp framework涉及的一些概念 
+% webapp涉及的一些概念 
 % hdm258i@gmail.com
 % 2013-03-18
-% 入门, webapp框架
+% 基础, webapp框架
 
 ## 前言 
 
-[移动webapp介绍](#howto/移动webapp介绍)一文介绍了webapp及其区别与普通web站点的一些特征，我们在开发一个webapp产品时，需要在一些基本概念上达成一致，只有在理解一致的基础上，才能进一步介绍框架细节。
+[移动webapp介绍](#howto/移动webapp介绍)一文介绍了webapp及其区别于普通web站点的一些特征，我们在开发一个webapp产品时，需要在一些基本概念上达成一致，只有在理解一致的基础上，才能进一步介绍框架细节。
 
 ## 一些概念
 
@@ -28,13 +28,13 @@ hash系统中的一个参数，比如列表页的hash值为**#list/focus**，那
     电视剧频道页：     #channel/tvplay
 
 ### loading效果
-webapp框架内部原生提供了两类loading效果，分别为**globalloading**和**pageloading**，前者用于document加载时给用户的等待反馈，后者用于页面数据加载时的等待反馈。
+Rocket框架内部原生提供了两类loading效果，分别为**globalloading**和**pageloading**，前者用于document加载时给用户的等待反馈，后者用于页面数据加载时的等待反馈。
 loading效果实现方式都是单例方式，也即页面任一时间不会同时展现两个globalloading或两个pageloading。
 
 ### 视图控制器树（view tree）
 多个Backbone.View的实例通过parent｜children引用链构成的**树状结构**。正是通过控制树的分层结构，将复杂的页面控制流程分解到各个子节点，实现**分而治之**的效果，降低代码的逻辑复杂度，同时还提升了代码的易维护性。
 
-MVC：webapp框架使用Backbone作为MVC基础类库，其对应关系如下：
+MVC：Rocket框架使用Backbone作为MVC基础类库，其对应关系如下：
     M: **Backbone.Model** or **BackBone.Collection**
     V: 前端模板系统（_.template，也可选用BaiduTemplate）
     C: Backbone.View，视图控制器
@@ -47,7 +47,7 @@ Backbone.View实际上从其设计和实现来看，都承担的是UI Controller
 
 ### 垃圾回收
 webapp使用顶级标签模拟页面，相比普通网页来说，其document的规模增大很多。页面多次切换，特别是包含子页面的情况，document中包含的dom节点会不断增多，不仅占用更多浏览器内存，也会导致页面性能下降。垃圾回收主要针对子页面的回收。
-@todo: 垃圾回收机制说明
+
 
 
 

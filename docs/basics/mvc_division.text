@@ -1,26 +1,31 @@
 % MVC分解 
 % hdm258i@gmail.com
 % 2013-03-21
-% 进阶, webapp框架
+% 基础, webapp框架
 
 ## 前言
 
-普通webapp在代码规模上一般都超1w，甚至更多。如何更好地用代码完相应的功能逻辑，直接影响webapp的开发效率和质量。
-在APP层面，使用传统web应用的路由分发机制，在页面层面，引入一种MVC的分解模型，形成的控制器树，使多个规模适中的MVC模块协作完成一个复杂的功能逻辑。本章介绍webapp框架是如何进行MVC分解的。
+前端是与用户距离最近的地方，不仅负责数据的展现，还负责与用户的各种交互，可以说展现和交互占据了大部分前端工作的内容，展现由View来完成，交互由UI Controller来完成，UI Controller同时还承担Model与View的同步。因此，UI Controller在WebApp的代码构成中占较大比重，合理的设计和开发UI Controller，对于前端代码架构而言至关重要。
+
+普通webapp在代码规模上一般都超1w，甚至更多。如何更好地用代码完成相应的功能逻辑，直接影响webapp的开发效率和质量。
+
+Rocket框架中，APP层面使用传统web应用的路由分发机制，而在Page层面，则引入一种MVC的分解模型，通过合理的树形分解，形成的控制器树，使多个规模适中的MVC模块协作完成一个复杂的功能逻辑，达到分而治之的效果。通过本章学习，将了解Rocket框架是如何进行MVC分解的。
 
 ## 1. 与传统MVC的关系
 
-webapp框架使用Backbone提供的MVC实现机制，与传统MVC的关系可以归纳如下：
+MVC是一种软件设计的理念，主张在代码组织上将业务逻辑（数据及相关处理）和展现分离，使模块功能内聚获得更高的复用程度，提升代码的易维护性和可伸缩性。
+
+Rocket使用Backbone提供的MVC实现机制，与传统MVC的关系可以归纳如下：
     
     传统            框架
     App Controller  rocket.router
     Model           rocket.model, rocket.collection
     UI Controller   rocket.baseview, rocket.pageview, rocket.subview
-    View            前端魔板系统(underscore.template)
+    View            前端模板系统(underscore.template)
 
-特殊地方在于带view后缀的类，实际上是承担**UI控制器**的角色，其派发来自UI的事件，真正的view由前端模板系统来承担。
+特殊地方在于带view后缀的类，实际上是承担**UI控制器**的角色，其派发来自UI的事件，真正的view由前端模板系统来承担。后文提到view，若未特殊说明，是指UI Controller的角色。
 
-@todo: model与view的对应关系
+
 @todo: model共享，页面内，跨页面
 
 ## 2. view与model的对应关系
@@ -31,17 +36,15 @@ webapp框架使用Backbone提供的MVC实现机制，与传统MVC的关系可以
 * 引入中间控制器，负责视图的创建和组织，形成一种层次结构，这正是v1.0采用的方式
 * 纯事件方式，通过事件派发和响应取代直接的方法调用
 
-@todo: v1.0和v2.0的区别
-
 这些方式都能work，但是对于创建关系（谁创建谁），交互关系（事件还是直接调用方法）等没有作出明确规定，最终的结果是各有各的实现方式，甚至一个webapp中不同页面的实现也存在差异，这对于代码开发和后期升级维护是极为不利的。
 
-框架v2.0基于框架v1.0进行了升级，保留了v1.0中视图创建和组织的层次结构（分而治之）以及单向创建，去掉了中间控制器（多余，很多情况下同view功能无异）以及4级命名空间（规避命名空间依赖）。
+Rocket v2.0基于版本v1.0进行了升级，保留了v1.0中视图创建和组织的层次结构（分而治之）以及单向创建，去掉了中间控制器（多余，很多情况下同view功能无异）以及4级命名空间（规避命名空间依赖）。
 
-v2.0对model和view的关系做了如下约定，归纳为：
+Rocket对model和view的关系做了如下约定，归纳为：
 
 * view创建同级别的model，不允许进行跨级别model的创建
 * view可以不创建model，仅当有需求才进行创建
-* model和view通过事件进行交互，也可以通过直接引用进行交互，视具体情况而定，以简单优先。但不允许跨级别直接引用，在不可避免的情况下，也只能使用事件进行交互，比如通用model。
+* model和view通过事件进行交互，也可以通过直接引用进行交互，视具体情况而定，以简单优先
 
 ## 3. MVC视图控制器树（view tree）
 
@@ -52,7 +55,7 @@ v2.0对model和view的关系做了如下约定，归纳为：
 
 ### 3.1 view tree及其创建
 
-简单view tree，如下所示：
+简单view tree，以新闻应用的detail page为例，如下所示：
 
     router.vs
         pageview.detail
@@ -64,7 +67,9 @@ v2.0对model和view的关系做了如下约定，归纳为：
 * pageview.detail创建subview.detail_toolbar, subview.detail_content
 * subview.detail_content创建subview.detail_content_news
 
-view负责按需创建同级别的model，如下：
+从树形结构来看，控制器与页面DOM结构有着类似的结构，当然这不是绝对的，实际应用中也存在不对应的情况。
+
+另外，view负责按需创建同级别的model，detail page的content部分用于显示新闻内容，其对应model为detail_news，如下：
 
     router.vs
         pageview.detail
@@ -73,7 +78,6 @@ view负责按需创建同级别的model，如下：
                 subview.detail_content_news => model.detail_news
 
 每个页面都有一棵view tree，根结点是pageview类型，其它节点都是subview类型。
-@todo: 类继承说明
 
 ### 3.2 view tree 代码示例
 
@@ -141,7 +145,7 @@ subview.detail_content_news在其init方法中创建model.detail_news，具体�
 
 视图总对应某个DOM节点，该节点可以是已经存在与DOM Tree的某个DOM节点，也可以通过动态创建的节点。视图创建时，所对应的DOM节点初始状态都为隐藏，须由视图控制器在适当的时候展现。
 
-视图的层次关系与其DOM节点的层次关系是匹配的。
+大部分情况下，视图的层次关系与其DOM节点的层次关系是匹配的。
  
 ## 4. MVC分解思路
 
@@ -156,8 +160,5 @@ MVC分解，可以综合考虑以下维度：
 如果控制逻辑十分复杂，还可以对该功能模块再进行分解，比如子MVC节点，孙子MVC节点等
 
 控制逻辑何为复杂，何为简单呢？可以简单的用代码规模来衡量。如果拆分成的MVC节点，其单个文件规模在300行以内为合理，如果超出300行，则可以考虑再进行分解。
-
-@todo: view必然与某个DOM节点对应，view的树形关系与DOM的树形也是对应的
-
 
 

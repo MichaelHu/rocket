@@ -18,45 +18,48 @@ webapp代码文件主要以js、css、html、图片等格式存在。框架对�
 
 js文件命名，按照js代码命名空间层级给出，举例如下：
 
-common模块，所有js文件命名都遵从**rocket.二级命名空间.js**的格式，无三级命名空间：
-    ▾ common/
-      ▾ webapp-2.0/
-        ▾ pageanimations/
-            rocket.pageanimation_fade.js
-            rocket.pageanimation_simple.js
-            rocket.pageanimation_slide.js
-          rocket.baseview.js
-          rocket.collection.js
-          rocket.js
-          rocket.model.js
-          rocket.pageview.js
-          rocket.router.js
-          rocket.subview.js
+Rocket框架代码，所有js文件命名都遵从**rocket.二级命名空间.js**的格式，无三级命名空间：
 
-app模块js目录，命名方式同common模块。不过在这里引入了三级命名空间vs，具体如下：
+    ▾ rocket/
+      ▾ pageanimations/
+          rocket.pageanimation_fade.js
+          rocket.pageanimation_simple.js
+          rocket.pageanimation_slide.js
+        rocket.baseview.js
+        rocket.collection.js
+        rocket.js
+        rocket.model.js
+        rocket.pageview.js
+        rocket.router.js
+        rocket.subview.js
 
-    ▾ app/
+以demo webapp mynotes为例，其js目录，命名同上。不过在这里引入了三级命名空间，具体如下：
+
+    ▾ mynotes/
       ▾ js/
-          rocket.conf.js
-          rocket.helper.js
-          rocket.init.js
-          rocket.router.vs.js
+        ▾ view/
+            rocket.subpageview.uibase_vimlikelist.js       
+            rocket.subview.ui_searchbox.js                 
+            rocket.subview.uibase_vimlikelist.js           
+          mynotes.helper.js                                
+          mynotes.uibase.js                                
+          rocket.init.js                                   
+          rocket.router.mynotes.js       
 
-app模块的page目录，以detailmulticolumn页面为例，其js目录下文件命名遵从**rocket.二级命名空间.三级命名空间.js**的格式，具体如下：
+mynotes的page目录，以notes页面为例，其js目录下文件命名遵从**rocket.二级命名空间.三级命名空间.js**的格式，具体如下：
 
-    ▾ app/
+    ▾ mynotes/
       ▾ page/
-        ▾ detailmulticolumn/
+        ▾ notes/
           ▾ js/
             ▾ model/
-                rocket.model.detailmulticolumn_pageslider.js
+                rocket.model.lines.js
             ▾ view/
-                rocket.pageview.detailmulticolumn.js
-                rocket.subview.detailmulticolumn_content.js
-                rocket.subview.detailmulticolumn_pageslider.js
+                rocket.pageview.notes.js
+                rocket.subpageview.notes_lines.js
+                rocket.subview.notes_header.js
 
-@todo: rocket.html，rocket.css， 放在其他地方
-@todo: 代码脚手架中的注意点
+
 
 @todo: js文件命名规范，其他文件命名规范
 @todo: 命名空间规范
@@ -66,21 +69,22 @@ app模块的page目录，以detailmulticolumn页面为例，其js目录下文件
 
 不同于js文件按命名空间方式命名，css、html、tpl的命名更简单一点，因为对于单个页面来讲，这些文件一般只有一个，所以可以直接使用页面的action name来命名。举例如下：
 
-detaimulticolumn页面的css、html、tpl文件的命名，具体如下：
+notes页面的css、html、tpl文件的命名，具体如下：
 
-    ▾ app/
+    ▾ mynotes/
       ▾ page/
-        ▾ detailmulticolumn/
+        ▾ notes/
           ▾ css/
-              detailmulticolumn.css
+              notes.css
           ▾ html/
-              detailmulticolumn.html
+              notes.html
+          ▾ img/
           ▾ tpl/
-              detailmulticolumn.tpl.html
+              notes.tpl.html
 
 除了页面内部文件的命名规范，还有**app级别**的文件命名规范，如下例子，全局loading和页面loading，属于产品级别通用模块，按**模块名**来命名文件：
 
-    ▾ app/
+    ▾ mynotes/
       ▾ css/
           globalloading.css
           pageloading.css
@@ -99,12 +103,12 @@ detaimulticolumn页面的css、html、tpl文件的命名，具体如下：
 * 一个页面对应多个js，按命名空间可以较好地避免冲突
 * 命名空间独有的层级组织，使得文件组织一目了然，开发者很容易找到要编辑的文件
 
-为什么**最多只有3级命名空间**呢？主要考虑命名空间的依赖对文件打包的限制。一、二级命名空间是框架提供的，对这两级命名空间的依赖通过app和commom的模块间依赖很容易实现。而在app模块内，如果引入四级命名空间，那么它对三级命名空间的依赖就需要在文件级别上来解决，比较麻烦，同时也不易于使用FIS的import提供的通配符包含。所以app模块内最多三级命名空间。
+为什么**最多只有3级命名空间**呢？主要考虑命名空间的依赖对文件打包的限制。一、二级命名空间是框架提供的，对这两级命名空间的依赖通过mynotes和commom的模块间依赖很容易实现，规定mynotes依赖common即可。而在mynotes模块内，如果引入四级命名空间，那么它对三级命名空间的依赖就需要在文件级别上来解决，需要手工进行，也不容易使用自动化工具。所以Rocket框架规定模块内最多三级命名空间。
 
 
 ## 2. 命名空间规范
 
-命名空间主要针对js代码。框架的**顶级命名空间为app**，预定义了6个核心二级命名空间：router, baseview, pageview, subview, model, collection。
+命名空间主要针对js代码。框架的**顶级命名空间为rocket**，预定义了9个核心二级命名空间：router, baseview, pageview, subpageview, globalview, subview, subpagemanager, model, collection。
 
 common模块最多为二级命名空间，以pageanimation为例，提供的三个切换效果的命名空间如下：
 
@@ -122,7 +126,7 @@ common模块最多为二级命名空间，以pageanimation为例，提供的三�
 
 目的是为了减少三级命名空间对二级命名空间的依赖，否则，在文件包含上，就必须保证rocket.pageanimation这个命名空间先于rocket.pageanimation.fade出现，很不易于代码打包。
 
-app模块**最多为三级命名空间**，以页面navzaker为例：
+webapp主模块**最多为三级命名空间**，以页面navzaker为例：
 
     ▾ page/
       ▾ listzaker/
@@ -135,7 +139,7 @@ app模块**最多为三级命名空间**，以页面navzaker为例：
               rocket.subview.listzaker_header.js
               rocket.subview.listzaker_pageslider.js
 
-与common模块一样，为了减少命名空间依赖，并不是以下形势，而是用下划线来表示层级关系：
+与common模块一样，为了减少命名空间依赖，并不是**以下**形式，而是用下划线来表示层级关系：
 
     ▾ js/
       ▾ model/
@@ -145,8 +149,6 @@ app模块**最多为三级命名空间**，以页面navzaker为例：
           rocket.subview.listzaker.content.js
           rocket.subview.listzaker.header.js
           rocket.subview.listzaker.pageslider.js
-
-@todo: 解释为什么不使用commonjs的方式
 
 ## 3. id-class命名规范
 
@@ -201,7 +203,5 @@ CSS类名与id命名规范类似，区别在于id的分隔符是**下划线**，
                     .detail-view-content-list-item
 
 其中.detail-view-content-list是动态创建的子页面对应的DOM节点。
-
-
 
 

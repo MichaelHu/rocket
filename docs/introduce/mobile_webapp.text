@@ -46,7 +46,8 @@ webapp不同与普通网页，它具有以下特征（摘自: http://www.html5ro
 
 ## 3. 有哪些webapp
 
-使用6作为特性阈值，以下站点是webapp：
+使用6作为特性阈值，以下站点是webapp（分析时间：2013-03）：
+
 1. mail.google.com 6
 2. rocket.ft.com 6
 3. m.baidu.com/ios 6
@@ -54,8 +55,4 @@ webapp不同与普通网页，它具有以下特征（摘自: http://www.html5ro
 5. m.baidu.com/video 6
 6. m.baidu.com/news 6
 7. map.baidu.com/mobile 6
-
-
-
-
 
