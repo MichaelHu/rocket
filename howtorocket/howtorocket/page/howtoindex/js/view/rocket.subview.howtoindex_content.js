@@ -34,6 +34,7 @@ rocket.subview.howtoindex_content = rocket.subview.extend({
     ,render: function(){
         var me = this,
             jianjie_tag = '简介',
+            basics_tag = '基础',
             rumen_tag = '入门',
             standards_tag = '规范',
             workshop_tag = 'workshop',
@@ -42,6 +43,9 @@ rocket.subview.howtoindex_content = rocket.subview.extend({
         me.$el.append(me.template({
             jianjie_tag: jianjie_tag 
             ,jianjie_articles: me.collection.getByTag(jianjie_tag)
+
+            ,basics_tag: basics_tag 
+            ,basics_articles: me.collection.getByTag(basics_tag)
 
             ,workshop_tag: workshop_tag 
             ,workshop_articles: me.collection.getByTag(workshop_tag)
