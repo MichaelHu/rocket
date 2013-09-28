@@ -23,6 +23,10 @@ Developers can also create a webapp through Scaffold Code in minutes.
 
 6. Others you will discover when you use it. ^_^
 
+## Documents
+
+refer to **HowtoRocket**: <http://258i.com/template/howtorocket/howtorocket.html>
+
 ## Sites Using Rocket Framework
 
 PS: Make sure you browse sites below **using appropriate devices**.
