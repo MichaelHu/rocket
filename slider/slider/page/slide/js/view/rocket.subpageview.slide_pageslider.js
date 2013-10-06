@@ -13,21 +13,33 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
     ,template: _.template($('#template_slide_news').text())
 
     ,init: function(options){
-        var me = this;
-
-        // 用于页面切换时，避免重复请求数据
-        me.isFirstLoad = true;
+        var me = this,
+            instance; 
 
         me.title = options.title;
         me.sliderIndex = options.sliderindex - 0;
 
+        instance 
+            = rocket.collection.outline_sections
+                .getInstance(me.title);
+
+        me.collection = instance
+            || new rocket.collection.outline_sections(
+                null
+                ,$.extend({}, options)
+            );
+
         // 从跨页面model获取数据
         me.sectionCount = 0;
         me.section = null; 
-        me.fetchSectionData();
+
+        // todo: 准确互斥
+        if(me.collection.loaded()){
+            me.fetchSectionData(me.collection);
+            me.render();
+        }
 
         me.hideLoading(-1);
-        me.render();
     }
 
     ,render: function(){
@@ -85,6 +97,8 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
             me.goprev();
         });
 
+        me.collection.on('reset', me.ondataready, me);
+
         ec.on('keydown', me.onkeydown, me);
 
         ec.on('goup', me.gooutlinepage, me);
@@ -97,7 +111,15 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
     ,unregisterEvents: function(){
         var me = this, ec = me.ec;
 
-        me.$el.off('swipeLeft swipeRight swipeDown keydown');
+        me.$el.off('swipeLeft swipeRight swipeDown');
+
+        me.collection.off('reset', me.ondataready, me);
+
+        ec.off('goup', me.gooutlinepage, me);
+        ec.off('goprev', me.ongoprev, me);
+        ec.off('gonext', me.ongonext, me);
+        ec.off('increaseimagesize', me.onincreaseimagesize, me);
+        ec.off('decreaseimagesize', me.ondecreaseimagesize, me);
     }
 
     ,onsubpagebeforechange: function(params){
@@ -110,10 +132,9 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
         if(to == me.ec){
             // 仅当参数与当前子页面参数吻合才响应
             if(me.featureString == featureString ){
-                // 重新获取数据并渲染，针对直接访问无数据，再次访问的情况
-                if(!me.section){
-                    me.fetchSectionData();
-                    me.render();
+                if(!me.collection.loaded()){
+                    me.showLoading(me.$el);
+                    me.collection.fetch();
                 } 
                 me.$el.show();
             }
@@ -135,18 +156,22 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
         }
     }
 
-    ,fetchSectionData: function(){
-        var me = this,
-            instance 
-                = rocket.collection.outline_sections
-                    .getInstance(me.title);
+    ,ondataready: function(collection){
+        var me = this;
     
-        me.section = instance 
-            ? instance.getSection(me.sliderIndex)
+        me.fetchSectionData(collection);
+        me.render();
+    }
+
+    ,fetchSectionData: function(collection){
+        var me = this;
+    
+        me.section = collection 
+            ? collection.getSection(me.sliderIndex)
                 : null;
 
-        me.sectionCount = instance
-            ? instance.getSectionCount()
+        me.sectionCount = collection
+            ? collection.getSectionCount()
                 : 0;
     }
 

@@ -9,6 +9,8 @@ rocket.collection.outline_sections = rocket.collection.extend({
             || 'ROCKET框架介绍';
         me.sections = null;
 
+        me.isLoaded = false;
+
         // 保留实例引用
         rocket.collection.outline_sections._instances
             || (rocket.collection.outline_sections._instances = {});
@@ -28,7 +30,12 @@ rocket.collection.outline_sections = rocket.collection.extend({
     }
 
     ,parse: function(resp, xhr){
+        this.isLoaded = true;
         return resp.content.slice(1);
+    }
+
+    ,loaded: function(){
+        return this.isLoaded;
     }
 
     ,getSections: function(){

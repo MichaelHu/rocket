@@ -9,18 +9,31 @@ rocket.subview.outline_content = rocket.subview.extend({
     }
 
     ,init: function(options){
-        var me = this;
-
-        // @note: 标识是否第一次加载，避免后续多次加载
-        me.isFirstLoad = true;
-
-        me.collection = new rocket.collection.outline_sections(
-            null
-            ,$.extend({}, options)
-        );
+        var me = this,
+            instance; 
 
         me.title = options.title
             || 'ROCKET框架介绍';
+
+        instance 
+            = rocket.collection.outline_sections
+                .getInstance(me.title);
+
+        me.collection = instance
+            || new rocket.collection.outline_sections(
+                null
+                ,$.extend({}, options)
+            );
+
+        // @note: 标识是否第一次加载，避免后续多次加载
+        if(me.collection.loaded()){
+            me.isFirstLoad = false; 
+        }
+        else{
+            me.isFirstLoad = true; 
+        }
+
+        me.isRendered = false;
 
         me.maxZIndex = 1000;
 
@@ -33,6 +46,7 @@ rocket.subview.outline_content = rocket.subview.extend({
         var me = this, ec = me.ec;
 
         ec.on("pagebeforechange", me.onpagebeforechange, me);
+        ec.on("pageafterchange", me.onpageafterchange, me);
 
         // collection的reset事件，model的change事件
         me.collection.on('reset', me.render, me);
@@ -54,6 +68,11 @@ rocket.subview.outline_content = rocket.subview.extend({
     ,render: function(){
         var me = this,
             sections = me.collection.getSections();
+
+        if(me.isRendered){
+            return;
+        }
+        me.isRendered = true;
 
         for(var i=0; i<sections.length; i++){
             me.append(new rocket.subview.outline_content_tile(
@@ -85,7 +104,22 @@ rocket.subview.outline_content = rocket.subview.extend({
                     }
                 });
             }
+
             me.$el.show();
+        }
+    }
+
+    ,onpageafterchange: function(params){
+        var me = this, 
+            from = params.from,
+            to = params.to,
+            param = params.params;
+
+        if(to == me.ec) {
+            if(!me.isFirstLoad 
+                && !me.isRendered){
+                me.render();
+            }
         }
     }
 
@@ -170,7 +204,7 @@ rocket.subview.outline_content = rocket.subview.extend({
             k;
 
         k = ranges.length;
-        
+
         $.each(tiles, function(index, item){
             var range = ranges[index%k]; 
             $(item).css(
