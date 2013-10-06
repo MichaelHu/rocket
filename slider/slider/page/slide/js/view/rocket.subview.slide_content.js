@@ -12,11 +12,11 @@ rocket.subview.slide_content = rocket.subview.extend({
             spm;
 
         spm = me.getSubpageManager({
-            subpageClass: rocket.subview.slide_pageslider 
+            subpageClass: rocket.subpageview.slide_pageslider 
             ,maxSubpages: 2
         });
 
-        subView = new rocket.subview.slide_pageslider(
+        subView = new rocket.subpageview.slide_pageslider(
             $.extend({}, options),
             me
         );
@@ -43,6 +43,8 @@ rocket.subview.slide_content = rocket.subview.extend({
                     ,ctrlKey: e.ctrlKey
                     ,target: me.subpageManager._currentSubpage
                 });
+
+                e.preventDefault();
 
                 setTimeout(function(){
                     keydownLocking = false;

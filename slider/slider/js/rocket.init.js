@@ -19,7 +19,7 @@ $.extend(rocket, {
 
         function scroll(e){
             // 先设置成足够的高度，确保有足够高度能scrollTo(0, 0)
-            $('#wrapper').height(600);
+            // $('#wrapper').height(600);
 
             // http://remysharp.com/2010/08/05/doing-it-right-skipping-the-iphone-url-bar/
             setTimeout(function(){

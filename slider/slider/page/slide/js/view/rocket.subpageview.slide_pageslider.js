@@ -1,6 +1,6 @@
 (function($){
 
-rocket.subview.slide_pageslider = rocket.subview.extend({
+rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
 
     // @todo: 强调view管理本身的el和className等，不跨级管理，做到分而治之
     className: 'slide-page-content-pageslider'
@@ -175,6 +175,8 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
                     break;
                 // 'right arrow' key
                 case 39:
+                // 'space' key
+                case 32:
                     me.gonext();
                     break;
                 // 'up arrow' key
