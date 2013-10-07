@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>My Toolkit</title>
+  <link rel="stylesheet" href="/static/mytoolkit/css/mytoolkit-aio.css"/>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<!--html snippets-->
+<!--全局加载元素-->
+<div class="global-loading">
+    <!--div class="global-loading-logo">
+        <div class="global-loading-anim"></div>
+    </div-->
+    <div class="global-loading-text">正在努力为您加载应用</div>
+</div>
+ 
+<div style="display:none;">
+    <div class="page-loading">
+        <div class="page-loading-logo">
+            <div class="page-loading-anim"></div>
+        </div>
+        <div class="page-loading-text">数据加载中，请稍候...</div>
+    </div>
+</div>
+ 
+
+<!--page view-->
+<div id="index_page">
+    <div id="index_page_header">My Toolkit</div>
+    <div id="index_page_content">
+        <a href="#todos">Todos <span class="todos-info"></span><span class="arrow"></span></a>
+        <a href="#about">About<span class="arrow"></span></a>
+    </div>
+</div>
+ 
+<div id="todos_page">
+
+    <div id="todos_page_header">
+        <span class="todos-page-header-backbtn"><span></span>返回</span>                
+        <span class="todos-page-header-title">Todos</span>                
+    </div>
+
+    <div id="todoapp">
+
+        <header>
+          <!--h1>Todos</h1-->
+          <div class="input-wrapper">
+              <input id="new-todo" type="text" placeholder="What needs to be done?">
+          </div>
+        </header>
+
+        <section id="main">
+          <input id="toggle-all" type="checkbox">
+          <label for="toggle-all">Mark all as complete</label>
+          <ul id="todo-list"></ul>
+        </section>
+
+        <footer>
+          <a id="clear-completed">Clear completed</a>
+          <div id="todo-count"></div>
+        </footer>
+
+    </div>
+
+    <div id="instructions">
+    Double-click to edit a todo.
+    </div>
+
+    <!--div id="credits">
+    Created by
+    <br />
+    <a href="http://jgn.me/">J&eacute;r&ocirc;me Gravel-Niquet</a>.
+    <br />Rewritten by: <a href="http://addyosmani.github.com/todomvc">TodoMVC</a>.
+    </div-->
+
+</div>
+ 
+<div id="about_page">
+    <div id="about_page_header">
+        <span class="about-page-header-backbtn"><span></span>返回</span>                
+    </div>
+
+    <div id="about_page_content">
+        <!--h2>About mytoolkit</h2-->
+        <dl>
+            <dt>v0.3 ( 2013-10-09 )</dt>
+            <dd>
+                <ul>
+                    <li>Index page: Todos button show "item[s] completed"</li>
+                </ul>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>v0.2 ( 2013-10-06 )</dt>
+            <dd>
+                <ul>
+                    <li>add About page</li>
+                    <li>some bugfix</li>
+                </ul>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>v0.1 ( 2013-09-30 )</dt>
+            <dd>
+                <ul>
+                    <li>add Todos page</li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+</div>
+ 
+
+</div>
+
+<!--front template-->
+<script type="text/template" id="template_index_todosinfo">
+<% if(itemsLeft) {%>
+<span><%= itemsLeft %></span> item<% if(itemsLeft > 1){ %>s<% } %> left
+<% } else { %>
+all completed
+<% } %>
+</script>
+
+ 
+<script type="text/template" id="item-template">
+    <div class="view">
+      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+      <label><%- title %></label>
+      <a class="destroy"></a>
+    </div>
+    <input class="edit" type="text" value="<%- title %>" />
+</script>
+
+<script type="text/template" id="stats-template">
+    <% if (done) { %>
+      <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+    <% } %>
+    <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+</script>
+
+ 
+<script type="text/template" id="template_about">
+
+</script>
+
+
+ 
+
+  </body>
+</html>
+
+<script type="text/javascript" src="/static/common/js/common_lib-aio.js"></script>
+<script type="text/javascript" src="/static/common/js/common_rocket-aio.js"></script>
+<script type="text/javascript" src="/static/extend_lib/extend_lib-aio.js"></script>
+<script type="text/javascript" src="/static/mytoolkit/js/mytoolkit-aio.js"></script>
+<script>
+rocket.init();
+</script>

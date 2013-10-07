@@ -495,7 +495,8 @@
     left:0;
     right:0;
     height:100%;
-    overflow:hidden;
+    overflow-y:scroll;
+    overflow-x:hidden;
 }
 
 /**
@@ -613,9 +614,8 @@
  * codeblock
  */
 .markdown-slide-codeblock{
-    margin:8px 0;
-    width:100%;
-    padding-left:5px;
+    margin:8px 5px;
+    padding:5px;
     border:1px solid #bbb;
     border-radius:4px;
     background:#eee;

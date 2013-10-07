@@ -19,7 +19,7 @@ $.extend(rocket, {
 
         function scroll(e){
             // 先设置成足够的高度，确保有足够高度能scrollTo(0, 0)
-            $('#wrapper').height(600);
+            // $('#wrapper').height(600);
 
             // http://remysharp.com/2010/08/05/doing-it-right-skipping-the-iphone-url-bar/
             setTimeout(function(){
@@ -164,6 +164,8 @@ rocket.collection.outline_sections = rocket.collection.extend({
             || 'ROCKET框架介绍';
         me.sections = null;
 
+        me.isLoaded = false;
+
         // 保留实例引用
         rocket.collection.outline_sections._instances
             || (rocket.collection.outline_sections._instances = {});
@@ -183,7 +185,12 @@ rocket.collection.outline_sections = rocket.collection.extend({
     }
 
     ,parse: function(resp, xhr){
+        this.isLoaded = true;
         return resp.content.slice(1);
+    }
+
+    ,loaded: function(){
+        return this.isLoaded;
     }
 
     ,getSections: function(){
@@ -296,18 +303,31 @@ rocket.subview.outline_content = rocket.subview.extend({
     }
 
     ,init: function(options){
-        var me = this;
-
-        // @note: 标识是否第一次加载，避免后续多次加载
-        me.isFirstLoad = true;
-
-        me.collection = new rocket.collection.outline_sections(
-            null
-            ,$.extend({}, options)
-        );
+        var me = this,
+            instance; 
 
         me.title = options.title
             || 'ROCKET框架介绍';
+
+        instance 
+            = rocket.collection.outline_sections
+                .getInstance(me.title);
+
+        me.collection = instance
+            || new rocket.collection.outline_sections(
+                null
+                ,$.extend({}, options)
+            );
+
+        // @note: 标识是否第一次加载，避免后续多次加载
+        if(me.collection.loaded()){
+            me.isFirstLoad = false; 
+        }
+        else{
+            me.isFirstLoad = true; 
+        }
+
+        me.isRendered = false;
 
         me.maxZIndex = 1000;
 
@@ -320,6 +340,7 @@ rocket.subview.outline_content = rocket.subview.extend({
         var me = this, ec = me.ec;
 
         ec.on("pagebeforechange", me.onpagebeforechange, me);
+        ec.on("pageafterchange", me.onpageafterchange, me);
 
         // collection的reset事件，model的change事件
         me.collection.on('reset', me.render, me);
@@ -341,6 +362,11 @@ rocket.subview.outline_content = rocket.subview.extend({
     ,render: function(){
         var me = this,
             sections = me.collection.getSections();
+
+        if(me.isRendered){
+            return;
+        }
+        me.isRendered = true;
 
         for(var i=0; i<sections.length; i++){
             me.append(new rocket.subview.outline_content_tile(
@@ -372,7 +398,22 @@ rocket.subview.outline_content = rocket.subview.extend({
                     }
                 });
             }
+
             me.$el.show();
+        }
+    }
+
+    ,onpageafterchange: function(params){
+        var me = this, 
+            from = params.from,
+            to = params.to,
+            param = params.params;
+
+        if(to == me.ec) {
+            if(!me.isFirstLoad 
+                && !me.isRendered){
+                me.render();
+            }
         }
     }
 
@@ -457,7 +498,7 @@ rocket.subview.outline_content = rocket.subview.extend({
             k;
 
         k = ranges.length;
-        
+
         $.each(tiles, function(index, item){
             var range = ranges[index%k]; 
             $(item).css(
@@ -746,146 +787,7 @@ rocket.pageview.slide = rocket.pageview.extend({
 
 (function($){
 
-rocket.subview.slide_content = rocket.subview.extend({
-    
-    el: '#slide_page_content'
-
-    ,init: function(options){
-        var me = this,
-            title = options.title,
-            sliderIndex = options.sliderindex,
-            subView,
-            spm;
-
-        spm = me.getSubpageManager({
-            subpageClass: rocket.subview.slide_pageslider 
-            ,maxSubpages: 2
-        });
-
-        subView = new rocket.subview.slide_pageslider(
-            $.extend({}, options),
-            me
-        );
-        me.append(subView);
-
-        // 注册子页面
-        spm.registerSubpage(me.featureString, subView);
-    }
-
-    ,registerEvents: function(){
-        var me = this, ec = me.ec;
-
-        ec.on("pagebeforechange", me.onpagebeforechange, me);
-        ec.on("pageafterchange", me.onpageafterchange, me);
-
-        var keydownLocking = false;
-        $(document).on('keydown', function(e){
-            if(!keydownLocking){
-                keydownLocking = true;
-
-                ec.trigger('keydown', {
-                    key: e.which
-                    ,shiftKey: e.shiftKey
-                    ,ctrlKey: e.ctrlKey
-                    ,target: me.subpageManager._currentSubpage
-                });
-
-                setTimeout(function(){
-                    keydownLocking = false;
-                }, 500);
-            }
-        });
-
-        // global events from sidenav
-        ec.on('sidenav:goup', function(){
-            ec.trigger('goup', {
-                target: me.subpageManager._currentSubpage    
-            });        
-        }, me);
-
-        ec.on('sidenav:gonext', function(){
-            ec.trigger('gonext', {
-                target: me.subpageManager._currentSubpage    
-            });        
-        }, me);
-
-        ec.on('sidenav:goprev', function(){
-            ec.trigger('goprev', {
-                target: me.subpageManager._currentSubpage    
-            });        
-        }, me);
-
-        ec.on('sidenav:increaseimagesize', function(){
-            ec.trigger('increaseimagesize', {
-                target: me.subpageManager._currentSubpage    
-            });        
-        }, me);
-
-        ec.on('sidenav:decreaseimagesize', function(){
-            ec.trigger('decreaseimagesize', {
-                target: me.subpageManager._currentSubpage    
-            });        
-        }, me);
-    }
-
-    ,unregisterEvents: function(){
-        var me = this, ec = me.ec;
-
-        ec.off("pagebeforechange", me.onpagebeforechange, me);
-        ec.off("pageafterchange", me.onpageafterchange, me);
-        $(document).off('keydown');
-    }
-
-    ,getSubpageSwitchDir: function(fromSubpage, toSubpage){
-        var f = fromSubpage, 
-            t = toSubpage,
-            dir = 0;
-
-        if(!f || !t){
-            dir = 0;
-        }
-        else{
-            dir = 
-                parseInt(f.options.sliderindex) 
-                    < parseInt(t.options.sliderindex)
-                ? 1 : 2;
-        }
-
-        return dir;
-    }
-
-    ,onpagebeforechange: function(params){
-        var me = this, 
-            from = params.from,
-            to = params.to,
-            param = params.params,
-            featureString = me.getFeatureString(param);
-
-        if(to == me.ec){
-            me.$el.show();
-            me.refreshViewHeight();
-        }
-    }
-
-    ,refreshHeight: function(){
-        var me = this;
-        window.scrollTo(0, 0);
-        me.$el.height($(window).height());        
-    }
-
-    ,onorientationchange: function(from, to){
-        var me = this; 
-        // @note: 不直接调用refreshHeight，而调用refreshViewHeight，使用其延时
-        me.refreshViewHeight();
-    }
-
-});
-
-})(Zepto);
-
-(function($){
-
-rocket.subview.slide_pageslider = rocket.subview.extend({
+rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
 
     // @todo: 强调view管理本身的el和className等，不跨级管理，做到分而治之
     className: 'slide-page-content-pageslider'
@@ -898,21 +800,33 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
     ,template: _.template($('#template_slide_news').text())
 
     ,init: function(options){
-        var me = this;
-
-        // 用于页面切换时，避免重复请求数据
-        me.isFirstLoad = true;
+        var me = this,
+            instance; 
 
         me.title = options.title;
         me.sliderIndex = options.sliderindex - 0;
 
+        instance 
+            = rocket.collection.outline_sections
+                .getInstance(me.title);
+
+        me.collection = instance
+            || new rocket.collection.outline_sections(
+                null
+                ,$.extend({}, options)
+            );
+
         // 从跨页面model获取数据
         me.sectionCount = 0;
         me.section = null; 
-        me.fetchSectionData();
+
+        // todo: 准确互斥
+        if(me.collection.loaded()){
+            me.fetchSectionData(me.collection);
+            me.render();
+        }
 
         me.hideLoading(-1);
-        me.render();
     }
 
     ,render: function(){
@@ -970,6 +884,8 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
             me.goprev();
         });
 
+        me.collection.on('reset', me.ondataready, me);
+
         ec.on('keydown', me.onkeydown, me);
 
         ec.on('goup', me.gooutlinepage, me);
@@ -982,7 +898,15 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
     ,unregisterEvents: function(){
         var me = this, ec = me.ec;
 
-        me.$el.off('swipeLeft swipeRight swipeDown keydown');
+        me.$el.off('swipeLeft swipeRight swipeDown');
+
+        me.collection.off('reset', me.ondataready, me);
+
+        ec.off('goup', me.gooutlinepage, me);
+        ec.off('goprev', me.ongoprev, me);
+        ec.off('gonext', me.ongonext, me);
+        ec.off('increaseimagesize', me.onincreaseimagesize, me);
+        ec.off('decreaseimagesize', me.ondecreaseimagesize, me);
     }
 
     ,onsubpagebeforechange: function(params){
@@ -995,10 +919,9 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
         if(to == me.ec){
             // 仅当参数与当前子页面参数吻合才响应
             if(me.featureString == featureString ){
-                // 重新获取数据并渲染，针对直接访问无数据，再次访问的情况
-                if(!me.section){
-                    me.fetchSectionData();
-                    me.render();
+                if(!me.collection.loaded()){
+                    me.showLoading(me.$el);
+                    me.collection.fetch();
                 } 
                 me.$el.show();
             }
@@ -1020,18 +943,22 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
         }
     }
 
-    ,fetchSectionData: function(){
-        var me = this,
-            instance 
-                = rocket.collection.outline_sections
-                    .getInstance(me.title);
+    ,ondataready: function(collection){
+        var me = this;
     
-        me.section = instance 
-            ? instance.getSection(me.sliderIndex)
+        me.fetchSectionData(collection);
+        me.render();
+    }
+
+    ,fetchSectionData: function(collection){
+        var me = this;
+    
+        me.section = collection 
+            ? collection.getSection(me.sliderIndex)
                 : null;
 
-        me.sectionCount = instance
-            ? instance.getSectionCount()
+        me.sectionCount = collection
+            ? collection.getSectionCount()
                 : 0;
     }
 
@@ -1060,6 +987,8 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
                     break;
                 // 'right arrow' key
                 case 39:
+                // 'space' key
+                case 32:
                     me.gonext();
                     break;
                 // 'up arrow' key
@@ -1183,6 +1112,147 @@ rocket.subview.slide_pageslider = rocket.subview.extend({
             // console.log('increase width to ' + width);        
             $(item).css('width', width + 'px');
         });
+    }
+
+});
+
+})(Zepto);
+
+(function($){
+
+rocket.subview.slide_content = rocket.subview.extend({
+    
+    el: '#slide_page_content'
+
+    ,init: function(options){
+        var me = this,
+            title = options.title,
+            sliderIndex = options.sliderindex,
+            subView,
+            spm;
+
+        spm = me.getSubpageManager({
+            subpageClass: rocket.subpageview.slide_pageslider 
+            ,maxSubpages: 2
+        });
+
+        subView = new rocket.subpageview.slide_pageslider(
+            $.extend({}, options),
+            me
+        );
+        me.append(subView);
+
+        // 注册子页面
+        spm.registerSubpage(me.featureString, subView);
+    }
+
+    ,registerEvents: function(){
+        var me = this, ec = me.ec;
+
+        ec.on("pagebeforechange", me.onpagebeforechange, me);
+        ec.on("pageafterchange", me.onpageafterchange, me);
+
+        var keydownLocking = false;
+        $(document).on('keydown', function(e){
+            if(!keydownLocking){
+                keydownLocking = true;
+
+                ec.trigger('keydown', {
+                    key: e.which
+                    ,shiftKey: e.shiftKey
+                    ,ctrlKey: e.ctrlKey
+                    ,target: me.subpageManager._currentSubpage
+                });
+
+                e.preventDefault();
+
+                setTimeout(function(){
+                    keydownLocking = false;
+                }, 500);
+            }
+        });
+
+        // global events from sidenav
+        ec.on('sidenav:goup', function(){
+            ec.trigger('goup', {
+                target: me.subpageManager._currentSubpage    
+            });        
+        }, me);
+
+        ec.on('sidenav:gonext', function(){
+            ec.trigger('gonext', {
+                target: me.subpageManager._currentSubpage    
+            });        
+        }, me);
+
+        ec.on('sidenav:goprev', function(){
+            ec.trigger('goprev', {
+                target: me.subpageManager._currentSubpage    
+            });        
+        }, me);
+
+        ec.on('sidenav:increaseimagesize', function(){
+            ec.trigger('increaseimagesize', {
+                target: me.subpageManager._currentSubpage    
+            });        
+        }, me);
+
+        ec.on('sidenav:decreaseimagesize', function(){
+            ec.trigger('decreaseimagesize', {
+                target: me.subpageManager._currentSubpage    
+            });        
+        }, me);
+    }
+
+    ,unregisterEvents: function(){
+        var me = this, ec = me.ec;
+
+        ec.off("pagebeforechange", me.onpagebeforechange, me);
+        ec.off("pageafterchange", me.onpageafterchange, me);
+        $(document).off('keydown');
+    }
+
+    ,getSubpageSwitchDir: function(fromSubpage, toSubpage){
+        var f = fromSubpage, 
+            t = toSubpage,
+            dir = 0;
+
+        if(!f || !t){
+            dir = 0;
+        }
+        else{
+            dir = 
+                parseInt(f.options.sliderindex) 
+                    < parseInt(t.options.sliderindex)
+                ? 1 : 2;
+        }
+
+        return dir;
+    }
+
+    ,onpagebeforechange: function(params){
+        var me = this, 
+            from = params.from,
+            to = params.to,
+            param = params.params,
+            featureString = me.getFeatureString(param);
+
+        if(to == me.ec){
+            me.$el.show();
+            me.refreshViewHeight();
+        }
+    }
+
+    ,refreshHeight: function(){
+        var me = this;
+        window.scrollTo(0, 0);
+        me.$el.height($(window).height());        
+    }
+
+    ,onorientationchange: function(from, to){
+        var me = this; 
+        // @note: 不直接调用refreshHeight，而调用refreshViewHeight，使用其延时
+        me.refreshViewHeight();
     }
 
 });
