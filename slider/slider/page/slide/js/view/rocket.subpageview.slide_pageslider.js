@@ -134,7 +134,7 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
             if(me.featureString == featureString ){
                 if(!me.collection.loaded()){
                     me.showLoading(me.$el);
-                    me.collection.fetch();
+                    me.collection.fetch({reset:true});
                 } 
                 me.$el.show();
             }

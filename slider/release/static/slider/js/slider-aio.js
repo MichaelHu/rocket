@@ -393,7 +393,8 @@ rocket.subview.outline_content = rocket.subview.extend({
         if(to == me.ec) {
             if(me.isFirstLoad){
                 me.collection.fetch({
-                    success: function(){
+                    reset: true
+                    ,success: function(){
                         me.isFirstLoad = false;
                     }
                 });
@@ -921,7 +922,7 @@ rocket.subpageview.slide_pageslider = rocket.subpageview.extend({
             if(me.featureString == featureString ){
                 if(!me.collection.loaded()){
                     me.showLoading(me.$el);
-                    me.collection.fetch();
+                    me.collection.fetch({reset:true});
                 } 
                 me.$el.show();
             }
