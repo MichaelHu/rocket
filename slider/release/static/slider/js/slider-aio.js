@@ -1135,6 +1135,7 @@ rocket.subview.slide_content = rocket.subview.extend({
         spm = me.getSubpageManager({
             subpageClass: rocket.subpageview.slide_pageslider 
             ,maxSubpages: 2
+            // ,subpageTransition: 'fade'
         });
 
         subView = new rocket.subpageview.slide_pageslider(

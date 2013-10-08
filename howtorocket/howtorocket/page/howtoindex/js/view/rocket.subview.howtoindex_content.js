@@ -72,7 +72,8 @@ rocket.subview.howtoindex_content = rocket.subview.extend({
         if(to == me.ec) {
             if(me.isFirstLoad){
                 me.collection.fetch({
-                    success: function(){
+                    reset: true
+                    ,success: function(){
                         me.isFirstLoad = false;
                     }
                 });

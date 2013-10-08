@@ -1,3 +1,4 @@
+// rocket.js
 /**
  * rocket根命名空间
  */
@@ -11,6 +12,7 @@ window.rocket = window.rocket || {};
 
 
 ;
+// rocket.baseview.js
 /**
  * View基类，控制展现逻辑，充当控制器的角色
  */
@@ -584,6 +586,7 @@ rocket.baseview = Backbone.View.extend({
 
 
 ;
+// rocket.collection.js
 /**
  * Collection类
  */
@@ -606,7 +609,7 @@ rocket.collection = Backbone.Collection.extend({
 
 
 ;
-
+// rocket.model.js
 /**
  * Model类
  */
@@ -630,6 +633,7 @@ rocket.model = Backbone.Model.extend({
 
 
 ;
+// rocket.pageview.js
 /**
  * pageview类，页面视图控制器，充当页面事件中心
  */
@@ -691,6 +695,7 @@ rocket.pageview = rocket.baseview.extend({
 
 
 ;
+// rocket.subpageview.js
 /**
  * subpageview类，子页面视图控制器
  */
@@ -721,6 +726,7 @@ rocket.subpageview = rocket.baseview.extend({
 
 
 ;
+// rocket.router.js
 /**
  * Router类，监听URL变化，并作转发
  * 产品线需继承rocket.router类
@@ -959,6 +965,7 @@ rocket.router = Backbone.Router.extend({
 
 
 ;
+// rocket.subview.js
 /**
  * subview类，页面子视图控制器
  */
@@ -984,6 +991,7 @@ rocket.subview = rocket.baseview.extend({
 
 
 ;
+// rocket.globalview.js
 /**
  * globalview类，全局视图控制器
  * 用于管理独立于页面之外，不参与页面事件流的部分，层级上与全局路由同级，能读取全局路由信息
@@ -1060,6 +1068,7 @@ rocket.globalview = rocket.baseview.extend({
 
 
 ;
+// rocket.subpagemanager.js
 (function($) {
 
 // @todo: subpage positon retain
@@ -1254,6 +1263,7 @@ rocket.subpagemanager.prototype = {
 
 
 ;
+// rocket.pageanimation_dropdown.js
 (function($) {
 
     rocket.pageanimation_dropdown = {};
@@ -1405,6 +1415,7 @@ rocket.subpagemanager.prototype = {
 })(Zepto);
 
 ;
+// rocket.pageanimation_fade.js
 (function($) {
 
     rocket.pageanimation_fade = {};
@@ -1445,6 +1456,7 @@ rocket.subpagemanager.prototype = {
 })(Zepto);
 
 ;
+// rocket.pageanimation_simple.js
 (function($) {
 
     rocket.pageanimation_simple = {};
@@ -1475,6 +1487,7 @@ rocket.subpagemanager.prototype = {
 
 
 ;
+// rocket.pageanimation_slide.js
 (function($) {
 
     rocket.pageanimation_slide = {};
