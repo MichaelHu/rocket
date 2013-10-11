@@ -157,17 +157,17 @@ webapp主模块**最多为三级命名空间**，以页面navzaker为例：
 ### 3.1 id命名规范
 
     根元素：            #wrapper
-    页面元素：          #页面名称_view
-    页面子元素：        #页面名称_view_子元素名称
-    下一级页面子元素：  #页面名称_view_子元素名称_子元素名称
+    页面元素：          #页面名称_page
+    页面子元素：        #页面名称_page_子元素名称
+    下一级页面子元素：  #页面名称_page_子元素名称_子元素名称
 
 依此类推，例如：
 
     #wrapper
-        #detail_view
-            #detail_view_header
-            #detail_view_content
-                #detail_view_content_list
+        #detail_page
+            #detail_page_header
+            #detail_page_content
+                #detail_page_content_list
 
 
 ### 3.2 class命名规范
@@ -175,21 +175,21 @@ webapp主模块**最多为三级命名空间**，以页面navzaker为例：
 CSS类名与id命名规范类似，区别在于id的分隔符是**下划线**，CSS类名的分隔符是**减号**。命名的时候，CSS类名以id为参照，层级与id对应。
 
     根元素：            .wrapper
-    页面元素：          .页面名称-view
-    页面子元素：        .页面名称-view-子元素名称
-    下一级页面子元素:   .页面名称-view-子元素名称-子元素名称
+    页面元素：          .页面名称-page
+    页面子元素：        .页面名称-page-子元素名称
+    下一级页面子元素:   .页面名称-page-子元素名称-子元素名称
 
 依此类推，例如：
 
     .wrapper
-        .detail-view
-        .detail-view-header
-        .detail-view-content
-            .detail-view-content-list
-                .detail-view-content-list-item
-                    .detail-view-content-list-item-title
+        .detail-page
+        .detail-page-header
+        .detail-page-content
+            .detail-page-content-list
+                .detail-page-content-list-item
+                    .detail-page-content-list-item-title
 
-实际上，.wrapper, .detail-view这类具有唯一性的节点一般不需要类选择器，直接使用id选择器即可。
+实际上，.wrapper, .detail-page这类具有唯一性的节点一般不需要类选择器，直接使用id选择器即可。
 
 
 ### 3.3 id-class命名规范
@@ -197,11 +197,11 @@ CSS类名与id命名规范类似，区别在于id的分隔符是**下划线**，
 实际情况中，id和class是混合的，CSS命名的时候，类名以id为参照，层级与id对应，举例如下：
 
     #wrapper
-        #detail_view
-            #detail_view_content 
-                .detail-view-content-list
-                    .detail-view-content-list-item
+        #detail_page
+            #detail_page_content 
+                .detail-page-content-list
+                    .detail-page-content-list-item
 
-其中.detail-view-content-list是动态创建的子页面对应的DOM节点。
+其中.detail-page-content-list是动态创建的子页面对应的DOM节点。
 
 
