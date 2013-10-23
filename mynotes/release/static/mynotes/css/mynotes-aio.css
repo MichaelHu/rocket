@@ -168,8 +168,10 @@ body{
     bottom:0;
 
     /*阻止文本选中*/
+    /*
     -webkit-user-select:none;
     -moz-user-select:none;
+    */
 
     overflow:auto; 
 }
@@ -278,8 +280,10 @@ body{
     bottom:0;
 
     /*阻止文本选中*/
+    /*
     -webkit-user-select:none;
     -moz-user-select:none;
+    */
 
     overflow:auto; 
 }
@@ -375,8 +379,10 @@ body{
     bottom:0;
 
     /*阻止文本选中*/
+    /*
     -webkit-user-select:none;
     -moz-user-select:none;
+    */
 
     overflow:auto; 
 }
@@ -512,8 +518,10 @@ body{
     bottom:0;
 
     /*阻止文本选中*/
+    /*
     -webkit-user-select:none;
     -moz-user-select:none;
+    */
 
     overflow:auto; 
 }
