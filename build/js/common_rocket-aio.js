@@ -1,4 +1,5 @@
 __inline("../../src/rocket.js");
+__inline("../../src/rocket.utils.js");
 __inline("../../src/rocket.baseview.js");
 __inline("../../src/rocket.collection.js");
 __inline("../../src/rocket.model.js");

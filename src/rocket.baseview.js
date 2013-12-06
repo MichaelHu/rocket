@@ -512,37 +512,8 @@ rocket.baseview = Backbone.View.extend({
         me.isNotFirstRefresh = true;
     }
 
-    ,tip: function(text, pos) {
-        var $wrapper = $('#wrapper'),
-            $tip = $wrapper.children(".global-tip");
-
-        if($tip.length == 0){
-            $tip = $('<div class="global-tip"><span></span></div>');
-            $wrapper.append($tip);
-        }
-
-        $tip.find("span").text(text);
-
-        $tip.css('top', $wrapper.height() / 2 + 'px');
-        switch(pos){
-            case 0:
-                $tip.css('text-align', 'center');
-                break;
-            case 1:
-                $tip.css('text-align', 'left');
-                break;
-            case 2:
-                $tip.css('text-align', 'right');
-                break;
-        }
-        $tip.show();
-
-        setTimeout(function(){
-            $tip.animate({"opacity":0}, 500, "", function(){
-                $tip.hide();
-                $tip.css({"-webkit-transition": "none", "opacity":1});
-            });
-        }, 1500);
+    ,tip: function(text, xpos, ypos, duration/*ms*/) {
+        rocket.utils.tip.apply(window, arguments);
     }
 
     /**
