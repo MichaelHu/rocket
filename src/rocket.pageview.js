@@ -41,14 +41,14 @@ rocket.pageview = rocket.baseview.extend({
         me._tops[me._currentLogicString] = window.scrollY;
     }
 
-    ,restorePos: function(params){
+    ,restorePos: function(params, defaultTop){
         var me = this,
             cls = me._currentLogicString 
                 = me._getLogicString(params);
 
         // @note: iOS4需要延时
         setTimeout(function(){
-            window.scrollTo(0, me._tops[cls] || 0);
+            window.scrollTo(0, me._tops[cls] || defaultTop || 0);
         }, 0);
     }
 

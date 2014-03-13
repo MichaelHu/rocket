@@ -55,9 +55,14 @@ $.extend(utils, {
                 break;
         }
 
+        $tip.css({"-webkit-transition": "none", "opacity":1});
         $tip.show();
 
         tipTimer = setTimeout(function(){
+            /**
+             * @note: 多次tip展示的情况下，可能animate动画晚于callback完成，
+             *        造成tip不展i示，故调用$tip.show()之前，重置其样式
+             */
             $tip.animate({"opacity":0}, 300, "", function(){
                 $tip.hide();
                 $tip.css({"-webkit-transition": "none", "opacity":1});
