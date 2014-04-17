@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>mynotes - 2.0</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <link rel="stylesheet" type="text/css" href="/static/mynotes/css/mynotes-aio.css" />
+</head>
+<body>
+    <div id="wrapper" class="news">
+<!--html snippets-->
+<!--全局加载元素-->
+<div class="global-loading">
+    <!--div class="global-loading-logo">
+        <div class="global-loading-anim"></div>
+    </div-->
+    <div class="global-loading-text">正在努力为您加载应用</div>
+</div>
+ 
+<div style="display:none;">
+    <div class="page-loading">
+        <div class="page-loading-logo">
+        </div>
+        <div class="page-loading-text">数据加载中，请稍候...</div>
+    </div>
+</div>
+ 
+<script id="template_ui_searchbox" type="text/template">
+<form>
+<div class="search-icon"></div>
+<input type="text" class="keyword" autocomplete="off" placeholder="可用' + '分隔多个关键词">
+</form>
+</script>
+
+
+ 
+
+<!--page view-->
+<div id="index_page">
+    <div id="index_page_header">
+        <div id="index_page_header_tag">Article List</div>
+        <div id="index_page_header_searchbox"></div>
+    </div>
+    <div id="index_page_lines"></div>
+</div>
+ 
+<div id="article_page">
+    <div id="article_page_header"></div>
+    <div id="article_page_lines"></div>
+</div>
+ 
+<div id="search_page">
+    <div id="search_page_header">
+        <div id="search_page_header_tag">Search Results</div>
+        <div id="search_page_header_pager">
+            <input class="current" value="22">
+            <span>/ 23</span>
+        </div>
+        <div id="search_page_header_searchbox"></div>
+    </div>
+    <div id="search_page_lines"></div>
+</div>
+ 
+<div id="notes_page">
+    <div id="notes_page_header">
+        <div id="notes_page_header_tag">Notes Lines</div>
+        <div id="notes_page_header_searchbox"></div>
+    </div>
+    <div id="notes_page_lines"></div>
+</div>
+ 
+
+    </div>
+
+<!--front template-->
+<script type="text/html" id="template_index_lines">
+    <%for(var i in articles){%>
+        <div class="line"><div class="line-number"><%=articles[i].article_id%></div><p><%- articles[i].title%></p></div>
+    <%}%>
+</script>
+
+ 
+<script type="text/html" id="template_article_lines">
+<%for(var i in lines){%>
+    <div class="line"><div class="line-number"><%=lines[i].line_num%></div><p><%= lines[i].text.replace(/\s/g, '&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') %></p></div>
+<%}%>
+</script>
+
+<script type="text/html" id="template_article_header">
+<h2><%- info.title %></h2>
+</script>
+
+
+ 
+<script type="text/html" id="template_search_lines">
+
+<% var last = 0; %>                                  
+<% for(var i=0; i<lines.length; i++){ %>
+    <% if(lines[i].line_num - last > 1){ %>
+        <% if(last != 0){ %>
+        </div>
+        <% } %>
+    <div class="line">
+    <% } %>
+<div class="inner-line"><div class="inner-line-number"><%=lines[i].line_num%></div><p><%= lines[i].text %></p></div>  
+    <% last = lines[i].line_num; %>
+<% } %>
+
+<% if(lines.length > 0){ %>
+    </div>
+<% } %>
+
+
+</script>
+
+ 
+<script type="text/html" id="template_notes_lines">
+    <%for(var i in lines){%>
+        <div class="line" data-articleid="<%= lines[i].article_id %>"><div class="line-number"><%=lines[i].line_num%></div><p><%= lines[i].text%></p></div>
+    <%}%>
+</script>
+
+ 
+</body>
+</html>
+<script type="text/javascript" src="/static/common/js/common_lib-aio.js"></script>
+<script type="text/javascript" src="/static/common/js/common_rocket-aio.js"></script>
+<script type="text/javascript" src="/static/mynotes/js/mynotes-aio.js"></script>
+<script>
+rocket.init();
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44281590-1', '258i.com');
+  ga('send', 'pageview');
+
+</script>
+ 
+

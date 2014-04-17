@@ -1,0 +1,33 @@
+*{
+    padding:0;
+    margin:0;
+}
+
+body{
+    font:normal 14px/24px normal;
+}
+
+#wrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.key-word{
+    color:#d00;
+    font-weight:bold;
+    background-color:#ff0;
+}
+
+/*global*/
+@import url("./globalloading.css?__inline")
+@import url("./mynotes_pageloading.css?__inline")
+@import url("./ui_searchbox.css?__inline")
+
+/*page*/
+@import url("../page/index/css/index.css?__inline")
+@import url("../page/article/css/article.css?__inline")
+@import url("../page/search/css/search.css?__inline")
+@import url("../page/notes/css/notes.css?__inline")

@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+.DS_Store
+*.swp
+*.bak
+=======
 *.swp
 .DS_Store
 .svn
 *.bak
 
 /output/
+>>>>>>> 82be879b842de4b83198db313d33c5ed571d46e4

@@ -1,0 +1,11 @@
+<script type="text/html" id="template_article_lines">
+<%for(var i in lines){%>
+    <div class="line"><div class="line-number"><%=lines[i].line_num%></div><p><%= lines[i].text.replace(/\s/g, '&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') %></p></div>
+<%}%>
+</script>
+
+<script type="text/html" id="template_article_header">
+<h2><%- info.title %></h2>
+</script>
+
+

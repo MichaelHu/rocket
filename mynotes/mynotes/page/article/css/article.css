@@ -1,0 +1,98 @@
+/*页面视图id，与action同名，以_page为后缀*/
+#article_page{
+    /*默认不展示*/
+    display:none;
+
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+
+    /*阻止文本选中*/
+    /*
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    */
+
+    overflow:auto; 
+}
+
+#article_page_header{
+    /*绝对定位*/
+    position:absolute;
+
+    /*撑满整个父容器*/
+    top:0;
+    left:0;
+    right:0;
+    height:60px;
+
+    -webkit-box-shadow:0px 0px 10px #000;
+}
+
+#article_page_header h2{
+    padding-left:10px;
+
+    border:4px solid #36C4F1;
+    border-width:0 0 0 5px;
+    font:bold 20px/60px Arial;
+}
+
+.article-page-lines{
+    /*绝对定位*/
+    position:absolute;
+
+    top:70px;
+    left:0;
+    right:0;
+    bottom:0;
+
+    overflow:scroll;
+}
+
+.article-page-lines *{
+    -webkit-transform:translateZ(0);
+}
+
+.article-page-lines div.line {
+    clear:both; 
+    min-height:30px; 
+    _height:30px;
+
+    border-left:3px solid transparent;
+}
+
+.article-page-lines div.current-line{
+    border-color:#F3649C;
+    background-color:#ccc;
+}
+
+.article-page-lines div.line-number{
+    display:none;
+    float:left; 
+    width:40px;
+    overflow:hidden;
+    cursor:pointer;
+
+    color:#999; 
+    text-align:center;
+    font:italic 12px/30px normal;
+}
+
+.article-page-lines div.line p{
+    min-height:30px; 
+    _height:30px;
+    padding-left:20px; 
+
+    font:normal 16px/30px normal;
+}
+
+.article-page-lines div.current-line p{
+}
+
+.article-page-lines div.current-line div.line-number{
+}

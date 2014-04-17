@@ -1,0 +1,44 @@
+<script type="text/template" id="template_howtoindex_articles">
+
+<h3><%- jianjie_tag %></h3>
+<% _.each(jianjie_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- basics_tag %></h3>
+<% _.each(basics_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- standards_tag %></h3>
+<% _.each(standards_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+</script>
+
+<script type="text/template" id="template_howtoindex_header">
+
+<h3><%- workshop_tag %>[持续增加，敬请期待]</h3>
+<% _.each(workshop_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- rumen_tag %></h3>
+<% _.each(rumen_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+<h3><%- jinjie_tag %></h3>
+<% _.each(jinjie_articles, function(item, index){ %>
+    <a href="#howto/<%= encodeURIComponent(item.title) %>"
+        class="howtoindex-page-content-list"><%- item.title %></a>
+<% }); %>
+
+</script>
+
