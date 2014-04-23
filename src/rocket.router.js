@@ -93,26 +93,50 @@ rocket.router = Backbone.Router.extend({
     doAction: function(action, params){
         var me = this, view = me.views[action];
         
-        if(!view){
+        function _getNewPageView(){
             view = me.views[action] 
                 = new rocket.pageview[action](params, action); 
+        }
+
+        function _doAction(){
+            // 切换视图控制器
+            me.previousView = me.currentView;
+            me.currentView = view;
+
+            me.trigger('routechange', {
+                from: me.previousView
+                ,to: me.currentView
+                // ,pageviews: $.extend({}, me.views)
+            });
+
+            me.switchPage(
+                me.previousView, 
+                me.currentView, 
+                params
+            );
+        }
+
+        if(!view){
+            if(!rocket.pageview[action]){
+                $.get(
+                    rocket.pageview.__remoteURLs[action]
+                    , function(response){
+                        $('head').append(
+                            '<style type="text/css">'
+                            + rocket.pageview.__cssContent[action]
+                            + '</style>'
+                        );
+                        window.eval(response); 
+                        _getNewPageView();
+                        _doAction();
+                    }
+                );
+                return;
+            }
+            _getNewPageView();
         } 
-        
-        // 切换视图控制器
-        me.previousView = me.currentView;
-        me.currentView = view;
 
-        me.trigger('routechange', {
-            from: me.previousView
-            ,to: me.currentView
-            // ,pageviews: $.extend({}, me.views)
-        });
-
-        me.switchPage(
-            me.previousView, 
-            me.currentView, 
-            params
-        );
+        _doAction();
     },
 
     /**
