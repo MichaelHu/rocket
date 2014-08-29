@@ -880,6 +880,7 @@ rocket.router = Backbone.Router.extend({
         }
 
         function _doAction(){
+
             // 切换视图控制器
             me.previousView = me.currentView;
             me.currentView = view;
@@ -899,17 +900,13 @@ rocket.router = Backbone.Router.extend({
 
         if(!view){
             if(!rocket.pageview[action]){
-                $.get(
-                    rocket.pageview.__remoteURLs[action]
-                    , function(response){
-                        $('head').append(
-                            '<style type="text/css">'
-                            + rocket.pageview.__cssContent[action]
-                            + '</style>'
-                        );
-                        window.eval(response); 
-                        _getNewPageView();
-                        _doAction();
+                include(
+                    action 
+                    , function(){
+                        setTimeout(function(){
+                            _getNewPageView();
+                            _doAction();
+                        }, 100);
                     }
                 );
                 return;
@@ -1547,13 +1544,14 @@ rocket.subpagemanager.prototype = {
      */
     rocket.pageanimation_simple.animate = function(currentEle, nextEle, dir, callback) {
 
-        var $currentEle = currentEle && $(currentEle),
-            $nextEle = nextEle && $(nextEle);
-
         if(currentEle != nextEle){
-            currentEle && $currentEle.hide();
+            /**
+             * @note: 直接设置style比使用$.show效率更高，
+             * 同时解决2G下模块化加载不能show成功的问题
+             */
+            currentEle && ( currentEle.style.display = 'none' );
             setTimeout(function(){
-                nextEle && $nextEle.show();
+                nextEle && ( nextEle.style.display = 'block' );
             }, 0);
         }
 

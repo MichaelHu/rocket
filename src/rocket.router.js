@@ -99,6 +99,7 @@ rocket.router = Backbone.Router.extend({
         }
 
         function _doAction(){
+
             // 切换视图控制器
             me.previousView = me.currentView;
             me.currentView = view;
@@ -118,17 +119,13 @@ rocket.router = Backbone.Router.extend({
 
         if(!view){
             if(!rocket.pageview[action]){
-                $.get(
-                    rocket.pageview.__remoteURLs[action]
-                    , function(response){
-                        $('head').append(
-                            '<style type="text/css">'
-                            + rocket.pageview.__cssContent[action]
-                            + '</style>'
-                        );
-                        window.eval(response); 
-                        _getNewPageView();
-                        _doAction();
+                include(
+                    action 
+                    , function(){
+                        setTimeout(function(){
+                            _getNewPageView();
+                            _doAction();
+                        }, 100);
                     }
                 );
                 return;
