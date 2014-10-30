@@ -15,6 +15,10 @@ rocket.router = Backbone.Router.extend({
         // 记录控制器变化
         this.currentView = null;
         this.previousView = null;
+
+        // 标示模块正在加载 
+        this.loadingModules = {};
+        this.actionCallbacks = {};
     },
 
     /**
@@ -91,7 +95,10 @@ rocket.router = Backbone.Router.extend({
      * @{param} params {object} action参数
      */
     doAction: function(action, params){
-        var me = this, view = me.views[action];
+        var me = this, 
+            view = me.views[action],
+            lms = me.loadingModules,
+            acbs = me.actionCallbacks;
         
         function _getNewPageView(){
             view = me.views[action] 
@@ -115,25 +122,42 @@ rocket.router = Backbone.Router.extend({
                 me.currentView, 
                 params
             );
+
         }
+
+        // 仅保留同一action的最新一次操作
+        acbs[action] = {
+            da: _doAction
+            , gp: _getNewPageView
+        };
 
         if(!view){
             if(!rocket.pageview[action]){
-                include(
-                    action 
-                    , function(){
-                        setTimeout(function(){
-                            _getNewPageView();
-                            _doAction();
-                        }, 100);
-                    }
-                );
+                // 避免重复发起模块加载请求
+                if(!lms[action]){
+                    lms[action] = 1;
+                    include(
+                        action 
+                        , function(){
+                            setTimeout(function(){
+                                acbs[action].gp();
+                                acbs[action].da();
+                                lms[action] = 0;
+                            }, 100);
+                        }
+                    );
+                }
                 return;
             }
-            _getNewPageView();
+
+            if(lms[action]){
+                return;
+            }
+
+            acbs[action].gp();
         } 
 
-        _doAction();
+        acbs[action].da();
     },
 
     /**
